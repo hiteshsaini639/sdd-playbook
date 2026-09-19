@@ -13,10 +13,11 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/decision-levels.md` — where a decision goes, by blast radius
 - `practices/agent-delegation.md` — which model does what, and why
 - `practices/feature-loop.md` — a parent running every task through fresh children
+- `practices/issue-log.md` — filing what you found but weren't asked to fix
 - `practices/token-budgets.md` — making a large codebase cheap to navigate
 - `practices/multi-repo-sdd.md` — one spec repo governing several code repos
 - `practices/localization.md` — storing meaning, not words
-- `templates/` — generic spec/plan/tasks, before project adaptation
+- `templates/` — generic spec/plan/tasks/issue, before project adaptation
 - `decisions/` — ADRs that apply to any project
 
 ## How this grows

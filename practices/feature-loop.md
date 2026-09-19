@@ -48,7 +48,11 @@ small spec note — the parent records and moves on.
 ## After each child
 The parent checks the child's claims against the repos (commit exists, box
 ticked, shas recorded) instead of trusting the report, applies any finding
-that affects later tasks, and pushes if the user approved pushing.
+that affects later tasks, files anything the child noticed outside its task
+as an issue (`issue-log.md`), and pushes if the user approved pushing.
+
+When spawning, tell the child about open issues in the files it will touch,
+so it neither rediscovers them nor fixes them in passing.
 
 ## Budget
 Each child aims for well under 100k tokens. Going over is allowed when the
