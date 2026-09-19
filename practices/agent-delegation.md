@@ -4,7 +4,7 @@
 | Tier | Model | Owns | Holds |
 |---|---|---|---|
 | Parent | Opus | One feature: spec, plan, task breakdown, decisions, drift | The feature's full context |
-| Child — implement | Sonnet | One task, fixed file list, one verify command | Only what the task lists |
+| Child — implement | Sonnet, or Opus if the task is complex | One task, fixed file list, one verify command | Only what the task lists |
 | Child — investigate | Opus | One open question needing judgement | Only what the question needs |
 
 A parent handles one feature at a time. A child handles one task. Neither
@@ -53,6 +53,10 @@ A child reports: what it did, the verify output, and anything it noticed that
 was outside its task. That last part matters — the child is the only one who
 saw those files, and an observation dropped there is one nobody else will
 make.
+
+## Running every task
+A parent that runs a whole feature spawns one fresh child per task, in
+order, picking the model per task. See `feature-loop.md`.
 
 ## Future: an orchestrator tier
 A tier above the parent, sequencing features rather than tasks. Worth adding

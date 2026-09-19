@@ -1,9 +1,11 @@
 # Token budgets
 
 ## The target
-One task should cost well under 100k tokens. A task that looks like it will
-blow that is too big — say so rather than pushing through, because the failure
-mode is not a bigger bill, it is an agent that ran out of room to think.
+One task should cost well under 100k tokens. Crossing it is acceptable when
+the task genuinely needs it; finish and say why. A task that looks like it
+will blow far past it (roughly 2×) is too big — say so rather than pushing
+through, because the failure mode is not a bigger bill, it is an agent that
+ran out of room to think.
 
 ## Where tokens actually go
 Not writing code. Finding out where the code is. In a large repo, blind
