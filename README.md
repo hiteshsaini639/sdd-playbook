@@ -17,6 +17,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/token-budgets.md` — making a large codebase cheap to navigate
 - `practices/multi-repo-sdd.md` — one spec repo governing several code repos
 - `practices/localization.md` — storing meaning, not words
+- `practices/single-source-of-truth.md` — one home per fact; refer by ID, never restate
 - `templates/` — generic spec/plan/tasks/issue, before project adaptation
 - `decisions/` — ADRs that apply to any project
 
