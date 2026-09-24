@@ -18,6 +18,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/multi-repo-sdd.md` — one spec repo governing several code repos
 - `practices/localization.md` — storing meaning, not words
 - `practices/single-source-of-truth.md` — one home per fact; refer by ID, never restate
+- `practices/verification-harness.md` — named checks per repo, test and smoke identities, done = green
 - `templates/` — generic spec/plan/tasks/issue, before project adaptation
 - `decisions/` — ADRs that apply to any project
 
