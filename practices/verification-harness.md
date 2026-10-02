@@ -14,6 +14,10 @@ Each product repo lists its checks in one place: its agent guide
 | **full** | before a task is ticked or a branch merged | the whole test suite |
 | **smoke** | after every deploy | a handful of requests against the running environment |
 
+A fourth check is not a command: the **local run**, by hand, for a change a
+person sees or two surfaces share. When it runs, who it runs as, and what it
+records: `local-run-check.md`.
+
 Task `Verify:` lines name these tiers ("fast, then full") and add only what
 is specific to the task. The commands themselves live in the repo, where they
 change (`single-source-of-truth.md`).
