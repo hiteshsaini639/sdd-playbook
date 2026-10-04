@@ -20,6 +20,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/single-source-of-truth.md` — one home per fact; refer by ID, never restate
 - `practices/verification-harness.md` — named checks per repo, test and smoke identities, done = green
 - `practices/local-run-check.md` — the by-hand check on a local run: when, standing local accounts, what gets recorded
+- `practices/session-handoff.md` — a prompt file for the next session, taken once and deleted
 - `templates/` — generic spec/plan/tasks/issue, before project adaptation
 - `decisions/` — ADRs that apply to any project
 

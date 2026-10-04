@@ -18,6 +18,7 @@ Read the one practice you need. Do not read all of them.
 | Setting up a spec repo | `practices/multi-repo-sdd.md` |
 | Touching anything user-visible | `practices/localization.md` |
 | Checking a change by hand on a local run | `practices/local-run-check.md` |
+| Handing work to the next session | `practices/session-handoff.md` |
 
 ## The one rule
 Code does not change unless a spec changed first. Everything else here is
