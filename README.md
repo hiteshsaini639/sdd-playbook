@@ -23,6 +23,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/session-handoff.md` — a prompt file for the next session, taken once and deleted
 - `templates/` — generic spec/plan/tasks/issue, before project adaptation
 - `decisions/` — ADRs that apply to any project
+  - `ADR-0001-proper-fix-first.md` — the proper fix by default; a shortcut only with its proper fix planned
 
 ## How this grows
 A practice earns its place here by being learned the hard way on a real
