@@ -47,6 +47,19 @@ later from memory.
 - **Ask for terse output.** A subagent told "max 400 lines, cite file:line,
   quote only where the exact shape matters" returns something usable. One
   told nothing returns a transcript.
+- **Read the governing documents by section.** A task cites its
+  requirements, criteria and decisions by ID; the agent reads those
+  sections, the task list's preamble and its own task, and the map rows it
+  will use or change: found by heading and ID (`grep -n`), then read by
+  line range. A whole spec, plan, task list and map read for one task is
+  a fixed cost of tens of thousands of tokens before any work, paid again
+  by every task. When a section points to another, follow it; when unsure
+  whether something applies, read more. Precision beats the saving.
+- **Read test output by its summary.** A full test run writes to a file;
+  the agent reads its totals and its failures (`grep` for the runner's
+  summary and failure lines), and opens more of the log only for a
+  failure it is fixing. A whole log in the context is paid for on every
+  turn after it.
 
 ## What not to optimise
 Do not compress a spec to save tokens. Specs are read once and govern

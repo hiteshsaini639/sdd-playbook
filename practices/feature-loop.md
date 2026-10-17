@@ -32,7 +32,9 @@ the model saved.
 A self-contained prompt: feature and task id, repo paths and branch, the
 task's text verbatim, its `Read:` list as the file budget, its verify and
 commit lines, the shas/tick procedure, any findings from earlier tasks that
-change this one, and the machine limits (below). The child should never need
+change this one, the machine limits (below), and how to read: the
+governing documents by section and test output by its summary
+(`token-budgets.md` → Other levers). The child should never need
 to read the parent's conversation.
 
 ## When the parent stops
