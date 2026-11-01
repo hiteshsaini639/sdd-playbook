@@ -21,7 +21,9 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/verification-harness.md` — named checks per repo, test and smoke identities, done = green
 - `practices/local-run-check.md` — the by-hand check on a local run: when, standing local accounts, what gets recorded
 - `practices/session-handoff.md` — a prompt file for the next session, taken once and deleted
-- `templates/` — generic spec/plan/tasks/issue, before project adaptation
+- `practices/new-project.md` — the checklist that sets a new project up for all of this
+- `skills/` — the Claude Code skills that run these practices; linked into a project (`skills/README.md`)
+- `templates/` — generic spec/plan/tasks/issue, the constitution, and the issues and prompts READMEs, before project adaptation
 - `decisions/` — ADRs that apply to any project
   - `ADR-0001-proper-fix-first.md` — the proper fix by default; a shortcut only with its proper fix planned
 

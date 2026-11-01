@@ -19,6 +19,8 @@ Read the one practice you need. Do not read all of them.
 | Touching anything user-visible | `practices/localization.md` |
 | Checking a change by hand on a local run | `practices/local-run-check.md` |
 | Handing work to the next session | `practices/session-handoff.md` |
+| Starting a new project | `practices/new-project.md` |
+| Changing or installing a skill | `skills/README.md` |
 
 ## The one rule
 Code does not change unless a spec changed first. Everything else here is
