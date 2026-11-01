@@ -111,6 +111,13 @@ A session writes a prompt in `prompts/` only when the owner asks:
   That is the only link between a spec and the code that satisfies it.
 - Time is UTC. IDs and phone numbers are strings.
 
+## Communication
+- Speak plainly. When citing an id (`D2`, `ADR-0005`, `I3`), say in the same
+  sentence what it is: "the tenant decision (ADR-0003)", not "per ADR-0003".
+- Explain jargon the first time it appears.
+- Code comments keep only what the long term needs: why something is not the
+  obvious way. No essays, no history (git has it).
+
 ## Budget
 One task should cost well under 100k tokens. Going over is fine when the
 task needs it. Finish and say why. At roughly 2× it is too big, so stop and

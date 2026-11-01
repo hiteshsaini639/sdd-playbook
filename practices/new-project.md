@@ -25,9 +25,13 @@ git submodule add <playbook remote> playbook
 | `map/<surface>.md` | new, one per product repo: where things live, pointing in (`token-budgets.md`) |
 | `prompts/README.md` | `playbook/templates/prompts-README.md` |
 | `runbooks/local-run.md` | new when the first by-hand check is needed (`local-run-check.md`) |
+| `CONTEXT.md` | new: the glossary, seeded with the terms the first decisions fix (`glossary.md`) |
+| `work/README.md` | new: parked work, `W<n>` files (`parked-work.md`) |
+| `docs/legacy/` | only when replacing a system: the tag, the feature inventory, the data traps (`rebuild-from-legacy.md`) |
 
 Each product repo gets a **Checks** section in its own `CLAUDE.md`
-(`verification-harness.md`), committed there.
+(`verification-harness.md`), committed there, and a port table and one-command
+start (`local-dev.md`).
 
 ## 3. The skills
 ```

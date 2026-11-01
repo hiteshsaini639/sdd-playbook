@@ -21,6 +21,15 @@ Read the one practice you need. Do not read all of them.
 | Handing work to the next session | `practices/session-handoff.md` |
 | Working beside another session | `practices/side-sessions.md` |
 | Starting a new project | `practices/new-project.md` |
+| Replacing an old system | `practices/rebuild-from-legacy.md` |
+| Shaping an API, its errors and limits | `practices/api-surfaces.md` |
+| Building login, tokens, sessions | `practices/auth-sessions.md` |
+| Building roles and permissions | `practices/permissions.md` |
+| Many CRUD entities and admin screens | `practices/declarations.md` |
+| Designing tables | `practices/data-conventions.md` |
+| Setting up local run, ports, env | `practices/local-dev.md` |
+| A word means something particular here | `practices/glossary.md` |
+| Parking work for later | `practices/parked-work.md` |
 | Changing or installing a skill | `skills/README.md` |
 
 ## The one rule
