@@ -85,11 +85,17 @@ Accounts may be added, removed or swapped without changing any of it.
   other.
 - **Which account for which child.** Whichever has room. The model is
   picked from the task, as always, not from the account.
+- **What a headless child does not get.** Browser tools such as Claude
+  in Chrome reach an interactive session only, not a headless one, even
+  on an account that has them. A by-hand check in the owner's real
+  browser is the owner's, or an interactive session's, not a child's.
 
 ## Two children at once
 One at a time is the rule. Two may run together only when all of this
 holds:
-- the owner has said parallel runs are wanted;
+- the owner has said parallel runs are wanted, for this run or this
+  pair: a yes does not carry over to the next feature, and a task list
+  that pairs tasks is a plan, not the owner's yes;
 - the two tasks touch different product repos (one on web, one on the
   app), never the same repo;
 - neither needs the result of the other, nor of any task not yet ticked.
@@ -118,6 +124,24 @@ Each child aims for well under 100k tokens. Going over is allowed when the
 task genuinely needs it; the child finishes and says why in its report. Going
 far over (roughly 2×) means the task was too big, so stop and report. The
 parent stays cheap by reading reports, not files.
+
+Two counts tell a task's size, and they differ by several times:
+- **the child's own,** what one context holds: the budget above and its
+  2× line are in this count, and the child watches it;
+- **the harness's,** which the parent sees when a child ends: the sum of
+  every turn, cache reads included. Held to the 2× line, it would stop
+  nearly every task.
+
+The parent reports the harness's count for each task, since it is the
+one that is measured, and pauses for size only past a much higher line,
+which the project sets (the feature-loop skill's additions).
+
+## Nothing the task did not ask for
+The parent adds no guard of its own that costs the owner time or money:
+repeated CI runs "in case it is flaky", an extra full build, a second
+review. If it thinks one is needed, it asks. The checks a task runs are
+its Verify line and the repo's Checks (`verification-harness.md` → CI
+before a merge).
 
 ## Machine limits
 The loop runs on someone's workstation. Children run verify steps one at a

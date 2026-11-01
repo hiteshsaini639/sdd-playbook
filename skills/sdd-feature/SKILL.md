@@ -56,8 +56,14 @@ For each unchecked task:
    When it is unclear which, read the diff of the feature's branch for
    that line: if the branch made it, it is the feature's.
 7. **Stop only for a decision** (see the feature loop). Otherwise go on.
+   Size is a decision only past the line the additions set, in the
+   harness's count (feature loop → Budget).
 
-After the last task, report: one line per task with model, shas and tokens,
+The child's prompt asks for nothing beyond its task: no repeated CI runs,
+no extra build (feature loop → Nothing the task did not ask for).
+
+After the last task, report: one line per task with model, shas and the
+harness's token count,
 what the children left and the sha that fixed each, issues filed during
 the run, anything left for the owner, and the
 Definition of done checklist.
@@ -117,8 +123,9 @@ accounts, Two children at once.
 - **The prompt** is the template above, opened with: this session was
   started for one task alone, so the implement skill's step 0 does not
   apply; it runs headless and cannot ask; it spawns no agent.
-- **Two at once**, only when the owner has asked for parallel runs, and
-  only tasks on different product repos. The second child's prompt adds:
+- **Two at once**, only when the owner has asked for parallel runs for
+  this run (ask; an earlier yes does not carry over), and only tasks on
+  different product repos. The second child's prompt adds:
   work in its product repo only; commit nothing in the spec repo and do
   not edit `tasks.md`; write `Shas:`, `Result` and `For later tasks` to
   `<out-dir>/result-<task-id>.md` as they should stand under the task; it

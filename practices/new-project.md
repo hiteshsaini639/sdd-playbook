@@ -41,7 +41,8 @@ priority, and the build commands with their memory caps.
 ## 4. What does not come along
 - **The session memory.** Claude Code keeps it per project folder, so a
   new project starts without it. A lesson in it that holds for any
-  project belongs here, as a practice, and the memory note goes.
+  project belongs here, as a practice, and the memory note goes. What is
+  the machine's (accounts, paths) stays in memory or the project.
 - **Another project's ADRs, ids and history.** Its rules arrive here only
   as practices or `playbook/decisions/`, made generic.
 

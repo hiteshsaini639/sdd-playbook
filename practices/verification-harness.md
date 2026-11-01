@@ -31,6 +31,12 @@ infrastructure, a known bug) is listed under **Checks → Known red**, with its
 issue ID. Agents skip past it instead of rediscovering it. The list is meant
 to shrink: every entry is an open issue.
 
+## CI before a merge
+One green CI run of the required checks is enough to merge. A run is
+repeated only when an acceptance criterion names repeated runs, or the
+owner agrees: each one is minutes of someone waiting. A test that passes
+only sometimes is an issue to file, not a reason to rerun until green.
+
 ## Identities for tests
 Tests never create users by hand and never go looking for a token. The test
 sources provide one fixture that:
