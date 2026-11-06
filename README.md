@@ -22,6 +22,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/local-run-check.md` — the by-hand check on a local run: when, standing local accounts, what gets recorded
 - `practices/session-handoff.md` — a prompt file for the next session, taken once and deleted
 - `practices/side-sessions.md` — a second session on the same machine, without breaking the first
+- `practices/unattended-job-alerts.md` — a scheduled job proves its output; alerts for failed, never ran, machine down
 - `practices/new-project.md` — the checklist that sets a new project up for all of this
 - `practices/rebuild-from-legacy.md` — the old system as evidence: tag, inventory, count, cite
 - `practices/api-surfaces.md` — one database client, public vs admin surfaces, errors, limits, health
