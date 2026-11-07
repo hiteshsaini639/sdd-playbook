@@ -30,6 +30,12 @@ the time, then the last few useful lines of the job's log, with the
 `sudo`/PAM session noise filtered out. A success message every night trains
 people to stop reading the channel.
 
+**The exception: no off-machine watcher.** Then silence cannot tell healthy
+from down, so one report a day posts either way, and the people reading the
+channel are the watcher — a missing morning message is the alarm. Make it
+glanceable: the verdict first (✅ OK / 🔴 FAILED, "Needs attention" in red),
+the reason on its own line, the log folded away. Failures still post at once.
+
 ## A second check catches "it never ran"
 A job cannot report a night it did not run: a disabled timer, a full disk at
 boot, a broken unit file. A separate job on its own timer, hours later,
