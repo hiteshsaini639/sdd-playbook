@@ -26,7 +26,8 @@ tell me which.
    rather than leaving the row blank — a silently empty row reads as an
    oversight.
 6. Fill every section the template has, or write "None" with a reason
-   (Translation keys and Backfill, for example).
+   (Translation keys and Backfill, for example). Security review is yes
+   or no, never None.
 7. Sort decisions by blast radius (`playbook/practices/decision-levels.md`).
    A decision affecting two or more surfaces beyond this feature belongs in
    `decisions/` as an ADR, not in the table — flag it and I will write it.

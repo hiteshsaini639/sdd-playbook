@@ -62,11 +62,21 @@ For each unchecked task:
 The child's prompt asks for nothing beyond its task: no repeated CI runs,
 no extra build (feature loop → Nothing the task did not ask for).
 
-After the last task, report: one line per task with model, shas and the
-harness's token count,
-what the children left and the sha that fixed each, issues filed during
-the run, anything left for the owner, and the
-Definition of done checklist.
+## After the last task
+The practice: `playbook/practices/feature-loop.md` → After the last task.
+1. **Review.** In each product repo the feature touched, on its feature
+   branch: `/code-review` at the level the additions name (`low` if
+   none), and `/security-review` too when `plan.md` → Security review
+   says yes. Never `max` or `ultra` unless the owner asks.
+2. **Sort the findings** as loop step 6 sorts a report: this feature's
+   become a fix task you add to `tasks.md` and run like any other; older
+   ones are filed as issues. One you judge wrong goes in the report with
+   the reason.
+3. **Report:** one line per task with model, shas and the harness's
+   token count; what the children and the review left, and the sha that
+   fixed each; issues filed during the run; review findings judged
+   wrong, with why; anything left for the owner; the Definition of done
+   checklist.
 
 ## Child prompt template
 ```

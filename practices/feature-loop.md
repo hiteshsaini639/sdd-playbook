@@ -57,6 +57,22 @@ as an issue (`issue-log.md`), and pushes if the user approved pushing.
 When spawning, tell the child about open issues in the files it will touch,
 so it neither rediscovers them nor fixes them in passing.
 
+## After the last task
+**One review.** The drift audit holds the code to the spec, so a defect
+the spec never imagined passes it: an endpoint that answers anyone, a
+secret written to a log, two requests that race. So the parent reviews
+what the feature changed, in each product repo, on its feature branch:
+- `/code-review`, at the level the project's additions name, `low` when
+  they name none. Never `max` or `ultra` unless the owner asks: those
+  start many reviewers and cost the most.
+- `/security-review` as well, when the plan's **Security review** says yes.
+
+These are skills, which a headless child cannot run, so the parent runs
+them. A finding is sorted like anything a child left: made by this
+feature, it is fixed in the feature, by a fix task the parent adds; there
+before, it is an issue (`issue-log.md`). A finding the parent judges wrong
+goes in the report with the reason, never silently dropped.
+
 ## Children on other accounts
 A child need not be a subagent of the parent's own session. Where the
 owner has more than one account on the machine, the parent may start a
@@ -138,8 +154,8 @@ which the project sets (the feature-loop skill's additions).
 
 ## Nothing the task did not ask for
 The parent adds no guard of its own that costs the owner time or money:
-repeated CI runs "in case it is flaky", an extra full build, a second
-review. If it thinks one is needed, it asks. The checks a task runs are
+repeated CI runs "in case it is flaky", an extra full build, a review
+beyond the one after the last task. If it thinks one is needed, it asks. The checks a task runs are
 its Verify line and the repo's Checks (`verification-harness.md` → CI
 before a merge).
 

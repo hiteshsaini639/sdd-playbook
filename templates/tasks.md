@@ -24,4 +24,5 @@ it, or the next task does — never a whole surface at a time.
 ## Definition of done
 All AC tests green · no test without an AC · every legacy row backfilled ·
 spec and test commits precede feature commits · system.md feature index
-updated · map/ updated if the working areas moved.
+updated · map/ updated if the working areas moved · the review after the
+last task run, each finding fixed or filed.

@@ -49,6 +49,12 @@ in a row here, naming the rule (`ADR-0009.3`) and the reason.>
 <What could go wrong and the mitigation. Each risk that needs a test gets one
 named RISK_….>
 
+## Security review
+<Yes or no, never blank. Yes when the feature touches sign-in, sessions,
+permissions, secrets, uploads, payments, or anything an anonymous caller can
+reach; name which. Yes adds `/security-review` to the review after the last
+task (`playbook/practices/feature-loop.md` → After the last task).>
+
 ## Issues
 Fixes: <I-ids this feature closes, each cited by a task, or "none">
 Observed, out of scope: <new problems seen while planning, filed in
