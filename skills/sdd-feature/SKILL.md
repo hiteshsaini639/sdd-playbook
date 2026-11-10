@@ -77,6 +77,10 @@ The practice: `playbook/practices/feature-loop.md` → After the last task.
    fixed each; issues filed during the run; review findings judged
    wrong, with why; anything left for the owner; the Definition of done
    checklist.
+4. **End with What to understand:** four lines in plain words, every id
+   with its meaning: the one idea the feature rests on; the riskiest
+   change (repo, file, line); how it could fail in use; where to look
+   first if it does. Not a summary of the tasks.
 
 ## Child prompt template
 ```
