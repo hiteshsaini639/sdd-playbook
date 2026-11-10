@@ -33,10 +33,15 @@ Each product repo gets a **Checks** section in its own `CLAUDE.md`
 (`verification-harness.md`), committed there, and a port table and one-command
 start (`local-dev.md`).
 
-## 3. The skills
+## 3. The skills and the hooks
 ```
 playbook/skills/link.sh
+playbook/hooks/link.sh spec <product folder>...    # or: single <code folder>...
 ```
+Commit the skill links and `.claude/settings.json`. The git hooks live
+outside git, so every clone runs the second line once
+(`machine-checks.md`).
+
 Then write `.claude/skill-additions/<skill>.md` only for what is the
 project's own (`playbook/skills/README.md` → A project's additions). For
 `sdd-feature` that is at least the machine limits: the test command at low

@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+# Refuses a commit message that breaks a rule the playbook checks by
+# machine. The practice: playbook/practices/machine-checks.md.
+#
+#   commit-msg <message-file>     as git runs it, on the staged change
+#   commit-msg --rev [<sha>...]   on commits already made, shas as arguments
+#                                 or one per line on stdin: a dry run over
+#                                 history before the hook is turned on
+#
+# The repo's role is `git config sdd.role`, set by hooks/link.sh:
+#   spec     every message has a type; a tick records a sha
+#   product  as spec, and a commit that changes code names its task
+#   single   both, where code is the folders in `git config sdd.codePaths`
+# SDD_ROLE and SDD_CODE_PATHS in the environment override the config.
+import os
+import re
+import subprocess
+import sys
+
+SKIP = re.compile(r'^(Merge |Revert "|fixup! |squash! |amend! )')
+TYPE = r'[A-Za-z0-9][\w./-]*(\([^)]*\))?'
+HEADER = re.compile(rf'^{TYPE}(, ?{TYPE})*!?: \S')
+TASK = re.compile(r'^[a-z][a-z0-9-]*\(\d{3}/T\d+[a-z]?(, ?T?\d+[a-z]?)*\)!?: ')
+RELEASE = re.compile(r'^(release(\([^)]*\))?|[a-z][a-z0-9-]*\(release\))!?: ')
+TICK = re.compile(r'^tasks\((\d{3})\): tick (T\d+[a-z]?(?:(?:, ?| and )T\d+[a-z]?)*)')
+TASK_LINE = re.compile(r'^- \[( |x|X)\] \*\*(T\d+[a-z]?)\b')
+FIELD = re.compile(r'^\s+[A-Z][A-Za-z ]*(\([^)]*\))?:')
+SHA = re.compile(r'\b[0-9a-f]{7,40}\b')
+NO_CODE = re.compile(r'^\s*none\b\W*\w')    # `Shas: none (DNS, no repo)`
+
+
+def git(*args):
+    return subprocess.run(['git', *args], capture_output=True, text=True).stdout
+
+
+def setting(env, key):
+    return os.environ.get(env) or git('config', '--get', key).strip()
+
+
+def subject_of(text):
+    for line in text.splitlines():
+        if line.strip() and not line.startswith('#'):
+            return line.rstrip()
+    return ''
+
+
+def changed_files(rev):
+    if rev is None:
+        out = git('diff', '--cached', '--name-only', '--no-renames')
+    else:
+        out = git('diff-tree', '--root', '--no-commit-id', '--name-only',
+                  '-r', '--no-renames', rev)
+    return [f for f in out.splitlines() if f]
+
+
+def tasks_file(rev, feature):
+    names = git('ls-tree', '-r', '--name-only', rev, 'specs') if rev \
+        else git('ls-files', 'specs')
+    for name in names.splitlines():
+        if re.fullmatch(rf'specs/{feature}-[^/]+/tasks\.md', name):
+            return name
+    return None
+
+
+def tick_problems(rev, feature, ids):
+    path = tasks_file(rev, feature)
+    if not path:
+        return [f'a tick of {feature}, but no specs/{feature}-*/tasks.md is staged']
+    text = git('show', f'{rev}:{path}' if rev else f':{path}')
+    tasks, current, in_shas = {}, None, False
+    for line in text.splitlines():
+        m = TASK_LINE.match(line)
+        if m:
+            current, in_shas = m.group(2), False
+            tasks[current] = {'ticked': m.group(1) != ' ', 'shas': ''}
+        elif line.startswith(('#', '- [')):
+            current = None
+        elif current:
+            s = re.match(r'^\s*Shas:(.*)', line)
+            if s:
+                tasks[current]['shas'], in_shas = s.group(1), True
+            elif in_shas and line.strip() and not FIELD.match(line):
+                tasks[current]['shas'] += ' ' + line    # a list run on to the next line
+            else:
+                in_shas = False
+    out = []
+    for t in ids:
+        task = tasks.get(t)
+        if not task:
+            out.append(f'{path} has no task {t}')
+        elif not task['ticked']:
+            out.append(f'{t} is not ticked in {path}: `- [x] **{t}`')
+        elif not SHA.search(task['shas']) and not NO_CODE.match(task['shas']):
+            out.append(f'{t} has no sha on its `Shas:` line in {path}, nor '
+                       '`none (<why no commit>)`: a ticked task with no sha is an unverifiable claim')
+    return out
+
+
+def problems(subject, files, rev, role, code_paths):
+    if SKIP.match(subject):
+        return []
+    if not HEADER.match(subject):
+        return ['the subject is not `type(scope): message` or `type: message`, '
+                'as `feat(012/T4): … [R3,AC2]` or `roadmap: …`']
+    out = []
+    if role == 'product':
+        code = [f for f in files if not f.endswith('.md')]
+    elif role == 'single':
+        code = [f for f in files
+                if any(f.startswith(p.rstrip('/') + '/') for p in code_paths)]
+    else:
+        code = []
+    if code and not TASK.match(subject) and not RELEASE.match(subject):
+        more = f' and {len(code) - 1} more' if len(code) > 1 else ''
+        out.append(f'it changes code ({code[0]}{more}) without naming its task: '
+                   '`<type>(NNN/Tn): … [ids]`. Code changes only through a spec')
+    m = TICK.match(subject) if role in ('spec', 'single') else None
+    if m:
+        out += tick_problems(rev, m.group(1), re.findall(r'T\d+[a-z]?', m.group(2)))
+    return out
+
+
+def main(argv):
+    role = setting('SDD_ROLE', 'sdd.role')
+    code_paths = setting('SDD_CODE_PATHS', 'sdd.codePaths').split()
+    if role not in ('spec', 'product', 'single'):
+        print('commit-msg: sdd.role is not set, nothing checked '
+              '(run playbook/hooks/link.sh)', file=sys.stderr)
+        return 0
+    if argv[1:2] == ['--rev']:
+        revs = argv[2:] or sys.stdin.read().split()
+        refused = 0
+        for rev in revs:
+            subject = git('log', '-1', '--format=%s', rev).strip()
+            found = problems(subject, changed_files(rev), rev, role, code_paths)
+            if found:
+                refused += 1
+                print(f'{rev[:9]} {subject}')
+                for p in found:
+                    print(f'    {p}')
+        print(f'{refused} of {len(revs)} would be refused')
+        return 0
+    with open(argv[1], encoding='utf-8', errors='replace') as f:
+        subject = subject_of(f.read())
+    found = problems(subject, changed_files(None), None, role, code_paths)
+    if found:
+        print('Commit refused (playbook/practices/machine-checks.md):', file=sys.stderr)
+        for p in found:
+            print(f'  - {p}', file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))

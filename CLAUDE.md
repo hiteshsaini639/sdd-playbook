@@ -32,6 +32,7 @@ Read the one practice you need. Do not read all of them.
 | A word means something particular here | `practices/glossary.md` |
 | Parking work for later | `practices/parked-work.md` |
 | Changing or installing a skill | `skills/README.md` |
+| A rule keeps being broken, or installing the hooks | `practices/machine-checks.md` |
 
 ## The one rule
 Code does not change unless a spec changed first. Everything else here is

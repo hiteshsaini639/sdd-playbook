@@ -104,6 +104,10 @@ project's additions to them: `.claude/skill-additions/`.
 A session writes a prompt in `prompts/` only when the owner asks:
 `prompts/README.md`.
 
+Hooks refuse what a machine can check (a commit with no task, a tick with
+no sha, `git add -A`): `playbook/practices/machine-checks.md`. A refusal is
+the rule speaking; fix the commit, never route around the hook.
+
 ## Conventions
 - Feature dirs are `NNN-kebab-slug`, numbered in order of first spec.
 - Commits here: `spec(012): …`, `plan(012): …`, `tasks(012): tick T4`.
