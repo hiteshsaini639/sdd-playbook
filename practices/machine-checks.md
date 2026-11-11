@@ -30,10 +30,18 @@ playbook/hooks/link.sh spec <product folder>...    # or: single <code folder>...
 ```
 - `git/commit-msg` is linked into each repo's git hooks, with the repo's
   role (`sdd.role`) and a single repo's code folders (`sdd.codePaths`) in
-  its git config. Git versions neither, so each clone runs `link.sh` once.
+  its git config. Git versions neither, so a fresh clone has no check.
 - `claude/guard-git.py` is a Claude Code hook in the project's
   `.claude/settings.json`, which is committed. It runs in every session
   started in the project, headless children of the feature loop included.
+- A **session start** beside it in `.claude/settings.json` fetches
+  `playbook/` if the clone lacks it and re-runs `link.sh`, quietly. So a
+  fresh clone, a cloud session's among them, links itself when Claude
+  Code starts in it. It says so when it cannot: a cloud session reaches
+  the playbook only if `.gitmodules` names it by an `https://` address
+  the session can read, not a host alias from one machine's ssh config.
+  A person committing in a fresh clone before any session runs `link.sh`
+  once.
 
 ## Rules
 - **A refusal names the rule and the fix.** One that only says "invalid"
