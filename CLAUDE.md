@@ -31,6 +31,7 @@ Read the one practice you need. Do not read all of them.
 | Setting up local run, ports, env | `practices/local-dev.md` |
 | A word means something particular here | `practices/glossary.md` |
 | Parking work for later | `practices/parked-work.md` |
+| Using more than one Claude account on a machine | `practices/account-label.md` |
 | Changing or installing a skill | `skills/README.md` |
 | A rule keeps being broken, or installing the hooks | `practices/machine-checks.md` |
 

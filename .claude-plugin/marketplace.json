@@ -1,0 +1,13 @@
+{
+  "name": "sdd-playbook",
+  "description": "The playbook's Claude Code mods: small changes to the session's own interface that every project of the owner's shares",
+  "owner": {
+    "name": "sdd-playbook"
+  },
+  "plugins": [
+    {
+      "name": "account-band",
+      "source": "./mods/account-band"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{ "name": "account-band", "version": "0.1.0", "description": "Names the Claude account this session runs on, in a band above the prompt" }

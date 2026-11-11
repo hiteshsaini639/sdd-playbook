@@ -34,8 +34,10 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/local-dev.md` — one command, fixed ports that fail rather than move, one env list
 - `practices/glossary.md` — `CONTEXT.md`: what a word means here, and nothing else
 - `practices/parked-work.md` — anything parked mid-task becomes a W file before work continues
+- `practices/account-label.md` — every session names the account it runs on, above the prompt
 - `skills/` — the Claude Code skills that run these practices; linked into a project (`skills/README.md`)
 - `hooks/` — the git and Claude Code hooks that refuse a broken rule; installed by `hooks/link.sh`
+- `mods/` — Claude Code mods every project shares; installed per account by `mods/install.sh`
 - `templates/` — generic spec/plan/tasks/issue, the constitution, and the issues and prompts READMEs, before project adaptation
 - `decisions/` — ADRs that apply to any project
   - `ADR-0001-proper-fix-first.md` — the proper fix by default; a shortcut only with its proper fix planned
