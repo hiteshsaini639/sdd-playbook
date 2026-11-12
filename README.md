@@ -43,6 +43,10 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `decisions/` — ADRs that apply to any project
   - `ADR-0001-proper-fix-first.md` — the proper fix by default; a shortcut only with its proper fix planned
 
+## Companion tools
+Separate repos, general to any project, installed once per machine rather than per project.
+- [claude-in-firefox](https://github.com/hiteshsaini639/claude-in-firefox) — Claude Code drives Firefox: an MCP server, a start script and a skill; Claude's own profile by default
+
 ## How this grows
 A practice earns its place here by being learned the hard way on a real
 project, not by sounding correct. When something in a project repo turns out
