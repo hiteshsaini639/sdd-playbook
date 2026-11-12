@@ -14,6 +14,7 @@ are generic. Whatever is a project's own lives in that project.
 | `/sdd-drift <NNN-slug>` | the audit of spec against code | `multi-repo-sdd.md` |
 | `/prompt-and-clear [next step]` | the prompt for the next session | `session-handoff.md` |
 | `/lets-go` | a session from the newest waiting prompt | `session-handoff.md` |
+| `/ux-review [screens]` | a walk of every screen against how people read them, as findings for a spec | `skills/ux-review/HEURISTICS.md` |
 
 ## Installing in a project
 From the spec repo's root, with the playbook at `playbook/`:
