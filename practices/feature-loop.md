@@ -119,10 +119,13 @@ Accounts may be added, removed or swapped without changing any of it.
   the same task at once.
 - **Which account for which child.** Whichever has room. The model is
   picked from the task, as always, not from the account.
-- **What a headless child does not get.** Browser tools such as Claude
-  in Chrome reach an interactive session only, not a headless one, even
-  on an account that has them. A by-hand check in the owner's real
-  browser is the owner's, or an interactive session's, not a child's.
+- **What a headless child does not get.** Claude in Chrome reaches an
+  interactive session only, not a headless one, even on an account that
+  has it. A browser served as an MCP server, such as claude-in-firefox
+  (README, Companion tools), does reach a headless child, in Claude's own
+  profile, and only one session at a time can drive it. A by-hand check in
+  the owner's real browser is the owner's, or an interactive session's,
+  not a child's.
 
 ## Two children at once
 One at a time is the rule. Two may run together only when all of this
