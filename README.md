@@ -35,6 +35,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/glossary.md` — `CONTEXT.md`: what a word means here, and nothing else
 - `practices/parked-work.md` — anything parked mid-task becomes a W file before work continues
 - `practices/account-label.md` — every session names the account it runs on, above the prompt
+- `practices/ai-features.md` — answer only or agent; one seam; the Claude CLI as a child that can only answer; the token
 - `skills/` — the Claude Code skills that run these practices; linked into a project (`skills/README.md`)
 - `hooks/` — the git and Claude Code hooks that refuse a broken rule; installed by `hooks/link.sh`
 - `mods/` — Claude Code mods every project shares; installed per account by `mods/install.sh`
