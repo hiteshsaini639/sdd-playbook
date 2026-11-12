@@ -108,10 +108,15 @@ Accounts may be added, removed or swapped without changing any of it.
   pushes nothing.
 - **The parent stays where it is.** When the parent's own account runs
   out, the children already started finish and commit; the parent checks
-  them when it is back. A child cut off by its account's limit is
-  resumed on that account, or its uncommitted work is thrown away and
-  the task is run again elsewhere: never half of one and half of the
-  other.
+  them when it is back. A child cut off before it finishes, by its
+  account's limit or because it stalled, is continued, never started
+  over: resumed on its own transcript when it can be, or else a fresh
+  child, on any account the owner switched on, picks up its uncommitted
+  work. The parent leaves the working tree as it is, and the new child's
+  prompt says what the cut-off child had done and that the diff is to be
+  carried on from, not redone. The work is thrown away only when the
+  diff is unusable, and the report says why. Two children never write
+  the same task at once.
 - **Which account for which child.** Whichever has room. The model is
   picked from the task, as always, not from the account.
 - **What a headless child does not get.** Browser tools such as Claude
