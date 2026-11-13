@@ -78,8 +78,10 @@ get any other way.
 - A bug in code shared with older features reaches everyone at deploy. Only
   the tests guard it.
 - No load testing: production's load is the real one.
-- An outward side effect (an SMS, an email, a payment) sent from the test
-  business reaches a real person. Each integration needs a "send nowhere for
-  a `sandbox` tenant" rule before the test business may use it.
+- Integrations (SMS, email, payments) run for real in the test business, so
+  the whole path is tried, provider included. A made-up record must therefore
+  carry a number or an email the owner controls: a random one reaches a
+  stranger. The first feature that sends decides, in its spec, whether a test
+  business's sends also go only to the owner, whatever the record holds.
 - Many users, several people deploying, or a regulated domain: revisit
   (the ADR says when).

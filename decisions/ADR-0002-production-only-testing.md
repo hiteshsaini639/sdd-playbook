@@ -37,10 +37,12 @@ the owner makes in a minute. Additive migrations keep a code rollback open.
 A bug in shared code still reaches everyone at deploy; only tests guard it.
 A rename or a drop takes two features. There is no load testing. The
 append-only log gets one exception, for the test business's rows through the
-clean command. Each outward integration (SMS, email, payment) needs a rule
-that it sends nothing for a test business.
+clean command. Integrations (SMS, email, payment) run for real in the test
+business, so its made-up records carry only numbers and emails the owner
+controls; the first feature that sends may also route a test business's sends
+to the owner.
 
 ## Revisit when
 Many users, more than one person deploying, a regulated domain, a need for
-load tests, or an integration whose side effects cannot be stopped for one
-tenant.
+load tests, or an integration whose side effects cannot be kept to the owner
+(a real payment, a message to a contact list the owner does not hold).
