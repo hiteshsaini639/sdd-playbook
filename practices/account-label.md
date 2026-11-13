@@ -15,6 +15,11 @@ looking: a band directly above the prompt, in a colour of its own.
   or configured per account, so the label cannot drift from the truth.
 - **The colour comes from the name**, so an account looks the same in
   every project and on every machine.
+- **The project and the working folder follow it** on the same row. The
+  project is the repository's name on its `origin` remote, so a worktree
+  folder such as `main` still reads as its project; with no remote, the
+  session's root folder. The folder is the session's working directory,
+  home shortened to `~`.
 - **It is one mod, in the playbook:** `mods/account-band/`. A project
   does not copy it or keep a version of its own.
 
