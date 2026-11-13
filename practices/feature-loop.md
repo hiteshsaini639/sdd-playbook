@@ -117,7 +117,9 @@ Accounts may be added, removed or swapped without changing any of it.
   carried on from, not redone. The work is thrown away only when the
   diff is unusable, and the report says why. Two children never write
   the same task at once.
-- **Which account for which child.** Whichever has room. The model is
+- **Which account for which child.** Whichever has room:
+  `claude-pick --which` names it (`account-label.md` → Which account to
+  use), and `run-child.sh` takes the part after `claude-`. The model is
   picked from the task, as always, not from the account.
 - **What a headless child does not get.** Claude in Chrome reaches an
   interactive session only, not a headless one, even on an account that

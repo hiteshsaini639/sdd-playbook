@@ -27,3 +27,7 @@ for account in "$@"; do
     fi
   done
 done
+# claude-pick, the launcher that starts the account with the most usage left
+# (practices/account-label.md), for the whole machine.
+mkdir -p "$HOME/.local/bin"
+ln -sf "$here/mods/account-band/claude-pick" "$HOME/.local/bin/claude-pick" && echo "linked: ~/.local/bin/claude-pick"

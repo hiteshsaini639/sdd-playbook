@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""Starts Claude on the account with the most usage left.
+
+  claude-pick [<account>] [claude args...]   start on the emptiest account, or the one named
+  claude-pick --list                         every account's usage and which one it would pick
+  claude-pick --which                        print the account it would pick, for scripts
+
+An account is a config folder in home: ~/.claude is "claude", ~/.claude-work is
+"claude-work" (or "work"). The account-band mod records each account's usage
+after its sessions' replies, in $XDG_STATE_HOME/claude-accounts/ (default
+~/.local/state); the rules here match the mod's.
+"""
+import json
+import os
+import re
+import sys
+from datetime import datetime, timezone
+
+HOME = os.path.expanduser("~")
+LEDGER = os.path.join(os.environ.get("XDG_STATE_HOME") or os.path.join(HOME, ".local", "state"), "claude-accounts")
+ACCOUNT_FOLDER = re.compile(r"^\.claude(-[\w-]+)?$")
+# An account with no reading yet is picked only once every account with one is this full.
+UNKNOWN = 90
+WINDOWS = {"five_hour": "5-hour", "seven_day": "week"}
+
+
+def parse_time(text):
+    return datetime.fromisoformat(text.replace("Z", "+00:00"))
+
+
+def accounts():
+    found = {}
+    for name in sorted(os.listdir(HOME)):
+        if ACCOUNT_FOLDER.match(name) and os.path.isdir(os.path.join(HOME, name)):
+            account = name[1:]
+            # The default account runs with no CLAUDE_CONFIG_DIR at all.
+            found[account] = {"dir": None if account == "claude" else os.path.join(HOME, name), "reading": None}
+    if os.path.isdir(LEDGER):
+        for name in sorted(os.listdir(LEDGER)):
+            if not name.endswith(".json"):
+                continue
+            try:
+                with open(os.path.join(LEDGER, name)) as handle:
+                    reading = json.load(handle)
+            except (OSError, ValueError):
+                continue
+            entry = found.setdefault(reading["account"], {"dir": reading.get("configDir"), "reading": None})
+            entry["reading"] = reading
+    return found
+
+
+# A window past its reset is empty again, whatever it last read.
+def used(window, now):
+    resets = window.get("resetsAt")
+    return 0 if resets and parse_time(resets) <= now else window["percentUsed"]
+
+
+def fullness(entry, now):
+    reading = entry["reading"]
+    if reading is None or not reading["windows"]:
+        return None
+    return max(used(window, now) for window in reading["windows"])
+
+
+def best(found, now):
+    keys = {account: fullness(entry, now) for account, entry in found.items()}
+    keys = {account: UNKNOWN if key is None else key for account, key in keys.items()}
+    open_ = [account for account, key in keys.items() if key < 100]
+    return min(open_, key=lambda account: keys[account]) if open_ else None
+
+
+def when(text, now):
+    at = parse_time(text).astimezone()
+    return at.strftime("%H:%M") if at.date() == now.astimezone().date() else at.strftime("%a %d %b %H:%M")
+
+
+def ago(text, now):
+    minutes = int((now - parse_time(text)).total_seconds() // 60)
+    return f"{minutes} min ago" if minutes < 60 else f"{minutes // 60} h ago" if minutes < 48 * 60 else f"{minutes // 1440} days ago"
+
+
+def describe(entry, now):
+    reading = entry["reading"]
+    if reading is None:
+        return "no reading yet"
+    parts = []
+    for window in reading["windows"]:
+        label = WINDOWS.get(window["kind"], window["kind"])
+        percent = used(window, now)
+        resets = window.get("resetsAt")
+        if percent and resets:
+            parts.append(f"{label} {percent:g}% until {when(resets, now)}")
+        else:
+            parts.append(f"{label} {percent:g}%")
+    return ", ".join(parts)
+
+
+def show(found, now):
+    pick = best(found, now)
+    width = max(len(account) for account in found)
+    for account, entry in found.items():
+        mark = "→" if account == pick else " "
+        read = f"  (read {ago(entry['reading']['readAt'], now)})" if entry["reading"] else ""
+        print(f"{mark} {account.ljust(width)}  {describe(entry, now)}{read}")
+    if pick is None:
+        print("Every account is full.")
+
+
+def named(found, word):
+    for account in (word, f"claude-{word}"):
+        if account in found:
+            return account
+    return "claude" if word == "default" and "claude" in found else None
+
+
+def main(args):
+    now = datetime.now(timezone.utc)
+    found = accounts()
+    if not found:
+        sys.exit("claude-pick: no ~/.claude or ~/.claude-* folder in home")
+    if args[:1] in (["-h"], ["--help"]):
+        print(__doc__.strip())
+        return
+    if args[:1] == ["--list"]:
+        show(found, now)
+        return
+    if args[:1] == ["--which"]:
+        pick = best(found, now)
+        if pick is None:
+            sys.exit(1)
+        print(pick)
+        return
+
+    account = named(found, args[0]) if args and not args[0].startswith("-") else None
+    if account is not None:
+        args = args[1:]
+    else:
+        account = best(found, now)
+        if account is None:
+            show(found, now)
+            sys.exit("claude-pick: every account is full; name one to start on it anyway")
+
+    entry = found[account]
+    env = dict(os.environ)
+    if entry["dir"] is None:
+        env.pop("CLAUDE_CONFIG_DIR", None)
+    else:
+        env["CLAUDE_CONFIG_DIR"] = entry["dir"]
+    print(f"claude-pick: {account} ({describe(entry, now)})", file=sys.stderr)
+    os.execvpe("claude", ["claude", *args], env)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

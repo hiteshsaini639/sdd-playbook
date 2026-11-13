@@ -1,1 +1,1 @@
-{"name": "account-band", "version": "0.3.0", "description": "A full-width bar above the prompt naming the Claude account, the project, the current feature's ticked tasks and the working folder", "types": "./types/index.d.ts"}
+{"name": "account-band", "version": "0.4.0", "description": "A full-width bar above the prompt naming the Claude account, the project, the current feature's ticked tasks, the working folder and how full every account's usage limit is", "types": "./types/index.d.ts"}
