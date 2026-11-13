@@ -1,1 +1,1 @@
-{"name": "account-band", "version": "0.2.0", "description": "Names the Claude account, the project and the working folder of this session, in a band above the prompt"}
+{"name": "account-band", "version": "0.3.0", "description": "A full-width bar above the prompt naming the Claude account, the project, the current feature's ticked tasks and the working folder", "types": "./types/index.d.ts"}

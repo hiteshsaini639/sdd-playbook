@@ -8,7 +8,8 @@ else (`feature-loop.md` → Children on other accounts).
 
 ## The rule
 Every interactive session names its account where the owner is already
-looking: a band directly above the prompt, in a colour of its own.
+looking: a one-row bar directly above the prompt, the full width of the
+terminal, in the account's own colour.
 
 - **The name is the config folder's**, with the dot dropped: `~/.claude`
   reads `claude`, `~/.claude-work` reads `claude-work`. Nothing is typed
@@ -20,6 +21,11 @@ looking: a band directly above the prompt, in a colour of its own.
   folder such as `main` still reads as its project; with no remote, the
   session's root folder. The folder is the session's working directory,
   home shortened to `~`.
+- **The feature sits between them**, as `016 admin ux pass 15/16 done`:
+  the ticked and total tasks of its `specs/NNN-name/tasks.md`. It is the
+  feature the branch names (`feat/016-…`), else the one whose `tasks.md`
+  changed last, re-read every ten seconds. A project with no `specs/`
+  features shows none.
 - **It is one mod, in the playbook:** `mods/account-band/`. A project
   does not copy it or keep a version of its own.
 
