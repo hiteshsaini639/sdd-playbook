@@ -2,7 +2,7 @@
 # Runs one child of the feature loop as a headless Claude Code session on
 # another account of this machine, and prints its report.
 #
-#   run-child.sh <account> <model> <prompt-file> <out-dir> <task-id>
+#   run-child.sh [--talk [--resume <session-id>]] <account> <model> <prompt-file> <out-dir> <task-id>
 #
 # <account>  the name after "claude-" of a config folder such as
 #            ~/.claude-work, which becomes the child's CLAUDE_CONFIG_DIR.
@@ -14,9 +14,19 @@
 # Edit, Write, Glob and Grep and nothing else, and is never prompted. Its
 # last message is its report: it lands in <out-dir>/out-<task-id>.json and
 # is printed here.
+# --talk     the child also reads messages the parent sends with
+#            send-child.sh while it works, and its session id lands in
+#            <out-dir>/session-<task-id>.txt; --resume <session-id> then
+#            continues that child with <prompt-file> as the next message
+#            (talk-child.py).
 # The practice: playbook/practices/feature-loop.md -> Children on other
 # accounts.
 set -u
+talk=""; resume=()
+if [ "${1:-}" = "--talk" ]; then
+  talk=1; shift
+  if [ "${1:-}" = "--resume" ]; then resume=(--resume "$2"); shift 2; fi
+fi
 account="$1"; model="$2"; prompt="$3"; out="$4"; task="$5"
 here="$(cd "$(dirname "$0")" && git rev-parse --show-toplevel)" || exit 2
 super="$(git -C "$here" rev-parse --show-superproject-working-tree)"
@@ -24,6 +34,11 @@ cd "${super:-$here}" || exit 2
 if [ "$account" != "default" ]; then
   [ -d "$HOME/.claude-$account" ] || { echo "no config folder ~/.claude-$account"; exit 2; }
   export CLAUDE_CONFIG_DIR="$HOME/.claude-$account"
+fi
+if [ -n "$talk" ]; then
+  [ "$prompt" -ef "$out/prompt-$task.txt" ] || cp "$prompt" "$out/prompt-$task.txt"
+  exec python3 "$(dirname "$(readlink -f "$0")")/talk-child.py" "$out" "$task" "${resume[@]}" \
+    --model "$model" --allowedTools Bash Read Edit Write Glob Grep --permission-mode acceptEdits
 fi
 claude -p "$(cat "$prompt")" \
   --model "$model" \

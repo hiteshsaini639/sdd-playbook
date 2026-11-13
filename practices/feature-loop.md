@@ -127,6 +127,35 @@ Accounts may be added, removed or swapped without changing any of it.
   the owner's real browser is the owner's, or an interactive session's,
   not a child's.
 
+### Talking to a headless child
+A subagent can be messaged after it reports; a headless child on another
+account is out of reach of the parent's message tool. When the parent
+may need to reach one, it starts the child in **talk mode**, where the
+child takes its prompt as the first of a stream of messages instead of
+one fixed prompt (the project's script, `--talk`).
+
+- **While it works.** The parent sends a line (the project's send
+  script); it reaches the child between two of its steps, marked as from
+  the parent, and the child takes it as the owner's word passed through
+  the parent. Send only what changes the child's course: an answer to
+  what it is stuck on, a finding from an earlier task it lacks, "stop
+  and report". Never a new task, never a second one.
+- **Watching first.** The child's events stream to a file as they
+  happen. The parent reads that before it writes, so a message answers
+  what the child is doing now, not what it was doing when last checked.
+- **After it reports.** The session ends at the child's first result with
+  none of its background work still running; a message sent later is
+  refused, not lost. To go on, the parent resumes that session with the
+  follow-up as its prompt (`--talk --resume <session id>`): same account,
+  same model, the child's whole context kept. That is how a half-finished
+  child is carried on (above), instead of a fresh one rereading its files.
+- **A message is not an approval.** A push, a merge, a deploy or a
+  decision the spec leaves open is still the owner's, asked in the
+  parent's session. The parent relays the owner's answer word for word,
+  and says it is the owner's.
+- **The report stays the record.** What the child was told mid-run goes
+  into the parent's run report beside the child's own, one line each.
+
 ## Two children at once
 One at a time is the rule. Two may run together only when all of this
 holds:

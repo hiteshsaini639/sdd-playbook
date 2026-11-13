@@ -134,9 +134,17 @@ accounts, Two children at once.
   run in the background from the spec repo, with the prompt in a file in
   the session's scratch folder. Its header says what it allows the child.
   `default` is the parent's own account.
+- **Talk mode, always:** add `--talk` before `<name>`. The child runs the
+  same; the parent can also reach it (practice → Talking to a headless
+  child). While it works: read `<out-dir>/stream-<task-id>.jsonl`, then
+  `.claude/skills/sdd-feature/send-child.sh <out-dir> <task-id> "<message>"`.
+  After it reports: `run-child.sh --talk --resume "$(cat <out-dir>/session-<task-id>.txt)" <name> <model> <follow-up-file> <out-dir> <task-id>b`,
+  same account and model.
 - **The prompt** is the template above, opened with: this session was
   started for one task alone, so the implement skill's step 0 does not
-  apply; it runs headless and cannot ask; it spawns no agent.
+  apply; it runs headless and cannot ask; it spawns no agent; a message
+  headed "From the parent:" may reach it while it works, and it follows
+  it as the owner's word passed on.
 - **Two at once**, only when the owner has asked for parallel runs for
   this run (ask; an earlier yes does not carry over), and only tasks on
   different product repos. The second child's prompt adds:
