@@ -36,12 +36,14 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/parked-work.md` — anything parked mid-task becomes a W file before work continues
 - `practices/account-label.md` — every session names the account it runs on, above the prompt
 - `practices/ai-features.md` — answer only or agent; one seam; the Claude CLI as a child that can only answer; the token
+- `practices/production-only-testing.md` — no staging: ship dark behind permissions, roll out by granting, migrations only add, a test business that can be emptied
 - `skills/` — the Claude Code skills that run these practices; linked into a project (`skills/README.md`)
 - `hooks/` — the git and Claude Code hooks that refuse a broken rule; installed by `hooks/link.sh`
 - `mods/` — Claude Code mods every project shares; installed per account by `mods/install.sh`
 - `templates/` — generic spec/plan/tasks/issue, the constitution, and the issues and prompts READMEs, before project adaptation
 - `decisions/` — ADRs that apply to any project
   - `ADR-0001-proper-fix-first.md` — the proper fix by default; a shortcut only with its proper fix planned
+  - `ADR-0002-production-only-testing.md` — one environment: trials on production behind permissions and a test business, no staging server
 
 ## Companion tools
 Separate repos, general to any project, installed once per machine rather than per project.
