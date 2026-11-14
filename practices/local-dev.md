@@ -22,5 +22,7 @@ The whole product runs on a laptop with one command, the same way every time.
   hand to log in.
 - **A test database** separate from the dev one, created by a setup script. The
   harness refuses to run against anything else (`data-conventions.md`).
+  Where checkouts share it, the test command locks it for the run
+  (`side-sessions.md` → "Shared resources guard themselves").
 - The health check, the seed and the test setup are the first three things a
   new machine runs. If they don't get it working, the README is wrong.

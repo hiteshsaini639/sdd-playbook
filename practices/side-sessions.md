@@ -18,13 +18,37 @@ local database, global settings.
   touched only with care: pull first, commit small, and never while it is
   mid-edit there.
 - **No shared ports or local database** while the other session runs
-  local checks. The project's runbook names its ports.
+  local checks. The project's runbook names its ports. Looking first is
+  not enough: a check made at the start sees only who was running then,
+  and the other session can start a moment later. The shared thing
+  guards itself (below).
 - **Nothing global.** No `gh auth switch`, no global git config, no
   change to the machine's tool versions: they change the other session
   too.
 - **Servers it starts, it stops.** A local server this session or its
   children started is stopped as soon as it is no longer needed. One it
   did not start is never stopped: it waits or asks.
+
+## Shared resources guard themselves
+Two sessions that share a local test database will, sooner or later, run
+their tests at once. Each run's reset empties the other's rows, so both
+fail, or one hangs for hours, on code that has no defect. A rule each
+agent must remember does not stop this. The test command itself does.
+- **The lock lives on the resource.** For a Postgres test database, the
+  test command takes an advisory lock (`pg_advisory_lock`) on that
+  database before its first reset and holds it on one connection for the
+  whole run. It names itself in `application_name` (checkout, pid, start
+  time), so a second run waits and prints who it waits for. Postgres frees
+  the lock the moment the holder's connection drops: a crashed or killed
+  run leaves nothing stale, which a lock file cannot promise.
+- **One lock per run.** The root command takes it and passes it down (an
+  environment variable), so the packages it runs in turn do not wait on
+  their own parent. A package run alone takes it itself.
+- **Every test file has a time limit.** A run that still meets trouble
+  fails in minutes, naming the file, instead of hanging.
+- A test database per checkout removes the wait altogether, at the cost
+  of setup per worktree. The lock is the smaller first step, and the same
+  pattern serves anything else the checkouts share.
 
 ## When the work meets
 A commit on a shared branch is pushed as soon as it is made, so the other
