@@ -40,8 +40,10 @@ last screen.
 
 **H7 Nothing is cut off.** Long text wraps, or is shortened with an ellipsis
 and the full text one tap away. No horizontal scroll inside a dialog or a
-card. Test with the longest real value. Spot: text running past a border;
-a word sliced at the edge; `white-space: nowrap` on anything user-written.
+card. Test with the longest real value, at the narrowest width, and on a
+phone at the largest text size it allows. Spot: text running past a border;
+a word sliced at the edge; `white-space: nowrap` on anything user-written;
+a button pushed off the screen at large text.
 
 **H8 Fit the control to the content.** Pick many from long items: a list of
 checkboxes, one per line. Toggle chips only for a few short labels (up to
@@ -77,7 +79,9 @@ code.
 
 **H14 Empty and edge states teach.** An empty list says what goes there and
 offers the action that fills it. No permission says so, and who to ask.
-Spot: a blank area; "No data".
+While data loads, the screen says it is loading. A read that failed says so
+in plain words, with a Try again that really reads again. Spot: a blank area;
+"No data"; a spinner that never stops; a Try again that does nothing.
 
 **H15 Undo or confirm the irreversible.** Deleting, cancelling, signing off:
 confirm with the consequence named ("Cancel this task? Its steps stay"),

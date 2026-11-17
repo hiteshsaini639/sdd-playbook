@@ -17,6 +17,11 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/token-budgets.md` — making a large codebase cheap to navigate
 - `practices/multi-repo-sdd.md` — one spec repo governing several code repos
 - `practices/localization.md` — storing meaning, not words
+- `practices/new-user-help.md` — a tour of each main screen, a first page that grows with use, what was seen kept on the server
+- `practices/forced-update.md` — the version gate in version 1, a minimum and a latest, fail open, the release order
+- `practices/public-forms.md` — store first then mail, traps instead of a captcha, an inbox in the admin
+- `practices/transactional-mail.md` — local logs instead of sending, SMTP not a provider's API, one design readable everywhere
+- `practices/replacing-paper.md` — keep the paper's shape, fix what it hides, sign-off locks a frozen month
 - `practices/single-source-of-truth.md` — one home per fact; refer by ID, never restate
 - `practices/verification-harness.md` — named checks per repo, test and smoke identities, done = green
 - `practices/machine-checks.md` — a rule a machine can check is checked by one: the hooks, tests and branch protection
@@ -26,7 +31,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/unattended-job-alerts.md` — a scheduled job proves its output; alerts for failed, never ran, machine down
 - `practices/new-project.md` — the checklist that sets a new project up for all of this
 - `practices/rebuild-from-legacy.md` — the old system as evidence: tag, inventory, count, cite
-- `practices/api-surfaces.md` — one database client, public vs admin surfaces, errors, limits, health
+- `practices/api-surfaces.md` — one database client, public vs admin surfaces, errors, limits, resends, health
 - `practices/auth-sessions.md` — access and refresh tokens, expiry, throttling, reset, bootstrap
 - `practices/permissions.md` — roles as data, (role, type, verb), enforced by the route generator
 - `practices/declarations.md` — one declaration per entity generates API, validation and admin screens
@@ -41,6 +46,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `hooks/` — the git and Claude Code hooks that refuse a broken rule; installed by `hooks/link.sh`
 - `mods/` — Claude Code mods every project shares; installed per account by `mods/install.sh`
 - `templates/` — generic spec/plan/tasks/issue, the constitution, and the issues and prompts READMEs, before project adaptation
+- `work/` — the playbook's own parked work, mostly practices still being learned (`W<n>` files, `practices/parked-work.md`)
 - `decisions/` — ADRs that apply to any project
   - `ADR-0001-proper-fix-first.md` — the proper fix by default; a shortcut only with its proper fix planned
   - `ADR-0002-production-only-testing.md` — one environment: trials on production behind permissions and a test business, no staging server

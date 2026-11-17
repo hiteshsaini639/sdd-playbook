@@ -69,6 +69,23 @@ per-instance and resets on deploy, so the real one belongs in shared state or
 the reverse proxy. A surface described as rate-limited and not limited is a
 claim the code does not keep.
 
+## Resends
+A client on a weak signal sends, loses the answer, and sends again. By
+then the user may have changed the words. Learned on a trip app used on
+the road, where a corrected expense of 5,000 was silently kept as 500.
+- The client gives each message one key and keeps sending under that key
+  until a send is answered as stored. Only then does the form make a new
+  key.
+- If the same key arrives again with the same content, the server keeps
+  one row and answers with it, as stored. "The same" means the stored
+  value exactly, character for character.
+- If the same key arrives with different content, the server stores
+  nothing and answers that the message was already stored, giving the
+  stored row. It never answers "stored" for words it did not store.
+- The form keeps the new words, says the earlier message arrived and
+  quotes it, and offers to send the new words as a new message under a
+  new key.
+
 ## Health
 `/healthz` sits outside the versioned surface and **queries the database**.
 A process that is listening is not a process that can serve, and a constant

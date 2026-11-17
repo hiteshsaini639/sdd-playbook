@@ -17,6 +17,11 @@ Read the one practice you need. Do not read all of them.
 | Working in a big codebase | `practices/token-budgets.md` |
 | Setting up a spec repo | `practices/multi-repo-sdd.md` |
 | Touching anything user-visible | `practices/localization.md` |
+| Helping a new user learn the screens | `practices/new-user-help.md` |
+| Shipping a mobile app | `practices/forced-update.md` |
+| Building a form anyone can send | `practices/public-forms.md` |
+| Sending mail from the app | `practices/transactional-mail.md` |
+| Moving a paper sheet into the app | `practices/replacing-paper.md` |
 | Checking a change by hand on a local run | `practices/local-run-check.md` |
 | Handing work to the next session | `practices/session-handoff.md` |
 | Working beside another session | `practices/side-sessions.md` |
