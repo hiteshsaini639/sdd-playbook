@@ -1,0 +1,214 @@
+#!/usr/bin/env python3
+"""Makes every Claude account on this machine share one set of sessions.
+
+  claude-share-sessions            show what --apply would do; changes nothing
+  claude-share-sessions --apply    merge every account's sessions into the shared folder and link them
+  claude-share-sessions --undo     give every account its own full copy again
+
+An account is a config folder in home: ~/.claude, ~/.claude-work, ~/.claude-sp (the
+rule claude-pick uses). Each account keeps its own login, settings, plugins and
+prompt history. Only the folders in SHARED move to ~/.local/share/claude-shared
+and are linked back into every account:
+  projects      session transcripts (what --resume lists) and each project's memory
+  file-history  the checkpoints /rewind needs
+  paste-cache   pasted text that transcripts point at
+
+Close every Claude session before --apply or --undo: a live session writes into these folders.
+After that, never have one session open in two accounts at once.
+
+When two accounts hold different files under the same name, the newer one stays and
+the other is kept in ~/.local/share/claude-shared/conflicts/. A memory index
+(MEMORY.md) is merged instead: lines from every account, nothing dropped.
+"""
+import filecmp
+import os
+import re
+import shutil
+import sys
+from datetime import date
+
+HOME = os.path.expanduser("~")
+ROOT = os.path.join(os.environ.get("XDG_DATA_HOME") or os.path.join(HOME, ".local", "share"), "claude-shared")
+CONFLICTS = os.path.join(ROOT, "conflicts")
+SHARED = ["projects", "file-history", "paste-cache"]
+ACCOUNT_FOLDER = re.compile(r"^\.claude(-[\w-]+)?$")
+BACKUP = f".pre-share-{date.today():%Y%m%d}"
+
+
+def accounts():
+    found = []
+    for name in sorted(os.listdir(HOME)):
+        path = os.path.join(HOME, name)
+        if ACCOUNT_FOLDER.match(name) and os.path.isdir(path) and not os.path.islink(path):
+            found.append((name[1:], path))
+    return found
+
+
+def live_sessions():
+    pids = []
+    for pid in os.listdir("/proc"):
+        if not pid.isdigit():
+            continue
+        try:
+            with open(f"/proc/{pid}/cmdline", "rb") as handle:
+                argv0 = handle.read().split(b"\0")[0].decode(errors="replace")
+        except OSError:
+            continue
+        if os.path.basename(argv0) == "claude":
+            pids.append(pid)
+    return pids
+
+
+def linked(path, item):
+    return os.path.islink(path) and os.path.realpath(path) == os.path.realpath(os.path.join(ROOT, item))
+
+
+def files(top):
+    for folder, _, names in os.walk(top):
+        for name in names:
+            path = os.path.join(folder, name)
+            yield os.path.relpath(path, top), path
+
+
+def same(a, b):
+    if os.path.islink(a) or os.path.islink(b):
+        return os.path.islink(a) and os.path.islink(b) and os.readlink(a) == os.readlink(b)
+    return filecmp.cmp(a, b, shallow=False)
+
+
+def plan():
+    """Decides, file by file, what the shared folder will hold. Writes nothing."""
+    chosen = {}     # (item, rel) -> (account, path) whose content the shared folder gets
+    indexes = {}    # (item, rel) -> extra MEMORY.md paths whose lines get appended
+    conflicts = []  # (item, rel, account, path) set aside
+    links = []      # (account, item, path) to replace with a link
+    counts = {}
+    for item in SHARED:
+        top = os.path.join(ROOT, item)
+        if os.path.isdir(top):
+            for rel, path in files(top):
+                chosen[(item, rel)] = ("shared", path)
+    for account, folder in accounts():
+        tally = counts.setdefault(account, {"new": 0, "same": 0, "merged": 0, "conflict": 0, "linked": 0})
+        for item in SHARED:
+            path = os.path.join(folder, item)
+            if linked(path, item):
+                tally["linked"] += 1
+                continue
+            if os.path.islink(path):
+                sys.exit(f"claude-share-sessions: {path} links somewhere else; sort it out by hand first")
+            links.append((account, item, path))
+            if not os.path.isdir(path):
+                continue
+            for rel, source in files(path):
+                key = (item, rel)
+                if key not in chosen:
+                    chosen[key] = (account, source)
+                    tally["new"] += 1
+                    continue
+                holder, held = chosen[key]
+                if same(held, source):
+                    tally["same"] += 1
+                elif os.path.basename(rel) == "MEMORY.md":
+                    indexes.setdefault(key, []).append(source)
+                    tally["merged"] += 1
+                else:
+                    tally["conflict"] += 1
+                    if os.lstat(source).st_mtime > os.lstat(held).st_mtime:
+                        conflicts.append((item, rel, holder, held))
+                        chosen[key] = (account, source)
+                    else:
+                        conflicts.append((item, rel, account, source))
+    return chosen, indexes, conflicts, links, counts
+
+
+def copy(source, target):
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+    shutil.copy2(source, target, follow_symlinks=False)
+
+
+def merged_index(base, extras):
+    with open(base) as handle:
+        lines = handle.read().splitlines()
+    seen = {line.strip() for line in lines if line.strip()}
+    for extra in extras:
+        with open(extra) as handle:
+            for line in handle.read().splitlines():
+                if line.strip() and line.strip() not in seen:
+                    lines.append(line)
+                    seen.add(line.strip())
+    return "\n".join(lines) + "\n"
+
+
+def apply(chosen, indexes, conflicts, links):
+    # Set aside the losers first: one of them may be a file already in the shared folder.
+    for item, rel, account, path in conflicts:
+        copy(path, os.path.join(CONFLICTS, item, f"{rel}.from-{account}"))
+    for (item, rel), (account, path) in chosen.items():
+        target = os.path.join(ROOT, item, rel)
+        if account != "shared":
+            copy(path, target)
+    for (item, rel), extras in indexes.items():
+        target = os.path.join(ROOT, item, rel)
+        text = merged_index(target, extras)
+        with open(target, "w") as handle:
+            handle.write(text)
+    for item in SHARED:
+        os.makedirs(os.path.join(ROOT, item), exist_ok=True)
+    for account, item, path in links:
+        if os.path.isdir(path):
+            backup, n = path + BACKUP, 1
+            while os.path.lexists(backup):
+                backup, n = f"{path}{BACKUP}-{n}", n + 1
+            os.rename(path, backup)
+        os.symlink(os.path.join(ROOT, item), path)
+
+
+def undo():
+    for account, folder in accounts():
+        for item in SHARED:
+            path = os.path.join(folder, item)
+            if linked(path, item):
+                os.unlink(path)
+                shutil.copytree(os.path.join(ROOT, item), path, symlinks=True)
+                print(f"{account}: {item} is its own copy again")
+    print(f"The shared folder is left in place: {ROOT}")
+
+
+def main(args):
+    if args[:1] in (["-h"], ["--help"]):
+        print(__doc__.strip())
+        return
+    live = live_sessions()
+    if args[:1] in (["--apply"], ["--undo"]) and live:
+        sys.exit(f"claude-share-sessions: {len(live)} Claude process(es) still running (pids {' '.join(live)}); close them all first")
+    if args[:1] == ["--undo"]:
+        undo()
+        return
+    chosen, indexes, conflicts, links, counts = plan()
+    for account, tally in counts.items():
+        if tally["linked"] == len(SHARED):
+            print(f"{account}: already shared")
+        else:
+            print(f"{account}: {tally['new']} files new to the shared folder, {tally['same']} already there, "
+                  f"{tally['merged']} memory indexes to merge, {tally['conflict']} name clashes")
+    if conflicts:
+        print("\nName clashes (the newer file stays; this one goes to conflicts/):")
+        for item, rel, account, _ in conflicts:
+            print(f"  {item}/{rel}  (the {account} copy)")
+    if indexes:
+        print("\nMemory indexes merged from more than one account:")
+        for item, rel in indexes:
+            print(f"  {item}/{rel}")
+    if args[:1] != ["--apply"]:
+        print(f"\nNothing changed. Close every Claude session, then run: claude-share-sessions --apply")
+        if live:
+            print(f"({len(live)} Claude processes are running now.)")
+        return
+    apply(chosen, indexes, conflicts, links)
+    print(f"\nDone. Shared folder: {ROOT}")
+    print(f"Each account's old folders are kept beside the link as <name>{BACKUP}; delete them once you're happy.")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
