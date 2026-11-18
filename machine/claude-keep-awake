@@ -1,0 +1,13 @@
+#!/bin/bash
+# Keeps the machine from suspending while a Claude session is working, so a run carries on with the screen
+# off, locked, or (on charger) the lid shut. It blocks suspend only while some `claude` process (not its
+# background helper) runs; with none, the normal power settings apply. Closing the lid on battery still
+# suspends: logind ignores this block for the lid. The practice: playbook/practices/machines.md.
+# Installed by playbook/machine/install.sh, started at login by claude-keep-awake.service.
+while true; do
+  if pgrep -a -x claude | grep -v -q ' daemon run '; then
+    systemd-inhibit --what=sleep:idle --who="Claude" --why="A Claude session is working" --mode=block sleep 60
+  else
+    sleep 30
+  fi
+done

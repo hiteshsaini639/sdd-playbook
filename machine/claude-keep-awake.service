@@ -1,0 +1,10 @@
+[Unit]
+Description=No suspend while a Claude session is working (playbook/practices/machines.md)
+
+[Service]
+ExecStart=%h/.local/bin/claude-keep-awake
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target
