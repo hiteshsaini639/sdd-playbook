@@ -33,9 +33,12 @@ person starts and a person checks afterwards.
   result was needed. Those belong on a host that stays up, with the alerts in
   `unattended-job-alerts.md`.
 - **Before starting:** it is on charger
-  (`cat /sys/class/power_supply/A*/online` prints 1), the power is on, and it
+  (`cat /sys/class/power_supply/A*/online` prints 1), its Wi-Fi works, and it
   answers over SSH. Start the job inside `tmux`, so a dropped connection
   doesn't kill it.
+- **The Wi-Fi router usually has no battery,** so a power cut ends the
+  network at once, while the laptop runs on. Checks for power and Wi-Fi
+  before and during a run are being tested: `work/W8-spare-machine-power-and-wifi-checks.md`.
 - **Afterwards a person reads the result.** A run that stopped half-way is
   continued as `feature-loop.md` says for a cut-off child, never assumed done.
 - **Its own logins.** Sign the spare machine into Claude, GitHub and the rest
