@@ -37,6 +37,12 @@ governing documents by section and test output by its summary
 (`token-budgets.md` → Other levers). The child should never need
 to read the parent's conversation.
 
+The prompt also says how to wait: a long command runs in the foreground,
+with a generous timeout and its output to a file, never behind a loop over
+`pgrep -f` or `pkill -f`, whose pattern matches the loop's own shell, so it
+never ends. Before reporting, the child stops every background shell it
+started and says so.
+
 ## When the parent stops
 Only for a decision, never for routine progress:
 - a child reports a question the spec does not answer
@@ -56,6 +62,23 @@ as an issue (`issue-log.md`), and pushes if the user approved pushing.
 
 When spawning, tell the child about open issues in the files it will touch,
 so it neither rediscovers them nor fixes them in passing.
+
+**No shell outlives its child,** on every account a child runs on (a
+subagent, or a headless child on another account). A child can report
+done while shells it started still run: a wait loop that never ends, a
+test run, a server. The parent notes the time before spawning. After the
+report, before the next child, it lists every Claude Code tool shell
+started since then, from any account (each sources a
+`shell-snapshots/snapshot-bash-…` file, so one `ps` finds them all):
+
+    ps -eo pid,etimes,args | awk -v age=$(( $(date +%s) - start )) -v me=$$ \
+      '$1 != me && $2 <= age && /shell-snapshots\/snapshot-bash/ && !/awk -v age/'
+
+Every one the parent did not start itself is the child's. The parent
+stops it, stops the child too if it still shows as running, and names
+both in the run report. Looking only for the task's own commands (`pnpm`,
+`flock`) misses a `bash` loop running `sleep`. That is how one child's
+three wait loops ran for 85 minutes unnoticed.
 
 ## After the last task
 **One review.** The drift audit holds the code to the spec, so a defect
