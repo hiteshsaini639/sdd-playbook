@@ -25,6 +25,10 @@ because the lid was closed or nobody touched the keyboard.
   `Custom` with `charge_control_end_threshold` at 80 on a Dell), otherwise in
   the BIOS. Before a day away from a socket, switch to `Standard` the night
   before, and back after.
+- **An OLED screen hides what never moves.** A picture that stays for
+  months burns in, so the dock hides until the pointer reaches its edge:
+  `gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false`,
+  then the same for `autohide true` and `intellihide false`.
 - Set up once per machine, with the next section's pop-ups and workspaces:
   `playbook/machine/install.sh`, from a terminal in the desktop session. It
   asks for sudo once, for the lid rule, and is safe to run again.
