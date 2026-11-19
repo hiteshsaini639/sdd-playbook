@@ -24,7 +24,11 @@ owner's machine, and any rule the owner added to the loop.
    parent then decides which child runs where, among those only. An agent
    the owner did not switch on runs no child, not even as a fallback when
    another's limit ends.
-3. Do not read product-repo files yourself. That is the children's budget.
+3. **Check which machine this is:** `hostname; nproc`, against the machine
+   table the additions point to (`feature-loop.md` → Machine limits). Its
+   row goes into every child prompt. A machine the table does not list: ask
+   the owner for its row, and until then use the strictest.
+4. Do not read product-repo files yourself. That is the children's budget.
 
 ## Loop, in order, one at a time
 For each unchecked task:
@@ -108,9 +112,10 @@ those line ranges; never a whole map. Test output: a full run goes to a
 file; read its totals and failures with grep, and more of the log only
 for a failure you are fixing.
 
-Machine limits: this is the user's workstation. Run verify steps one at a
-time, cheapest first, at low priority (nice -n 19). Never run a production
-build, a dev server or a watch mode unless the task's Verify line names it.
+Machine limits: this is the user's workstation, <hostname>. Its row:
+<priority, one check at a time or side by side, loops at once, any lock>.
+Run verify steps cheapest first. Never run a production build, a dev server
+or a watch mode unless the task's Verify line names it.
 <the project's commands and caps, from the additions>
 Leave "manual:" verify steps to the user and say so in your report.
 

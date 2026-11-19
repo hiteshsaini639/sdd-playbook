@@ -1,7 +1,9 @@
 # Machines: the laptop you carry, and a spare one
 
 One laptop does the work and goes everywhere. A spare machine, if there is
-one, helps only when someone has just made sure it is ready.
+one, helps only when someone has just made sure it is ready. What each
+machine may run for a project's checks and feature loops:
+`feature-loop.md` → Machine limits.
 
 ## The laptop keeps working shut, on charger
 A long run (a feature loop, a full test suite, a big copy) must not stop

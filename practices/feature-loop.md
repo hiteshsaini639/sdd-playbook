@@ -212,9 +212,28 @@ its Verify line and the repo's Checks (`verification-harness.md` → CI
 before a merge).
 
 ## Machine limits
-The loop runs on someone's workstation. Children run verify steps one at a
-time, cheapest first, at low priority. They never add a heavy step (full
+The loop runs on someone's workstation, often while they work on it.
+Children run verify steps cheapest first. They never add a heavy step (full
 production build, whole test suite in watch mode, dev server) that the task
 does not ask for. When a task does require one, cap it so it cannot take the
 machine down, and leave interactive checks (click through the running app) to
 the human.
+
+**The limits are per machine.** A project is often worked on from more than
+one machine (`machines.md`), and what a small one must ration a large one
+need not. The project keeps one table of its machines, a row each:
+- **how to tell it**: its `hostname`, or its core count (`nproc`) where the
+  name is not known;
+- **checks**: low priority (`nice -n 19`) and one at a time, or full
+  priority with the slow checks side by side once the cheap ones pass;
+- **loops at once**: how many feature loops may run on it together, each in
+  its own worktree.
+
+Before the first child, the parent runs `hostname; nproc` and hands every
+child that machine's row. On a machine the table does not list, it uses the
+strictest row and asks the owner for a new one.
+
+Two loops on one machine are safe only where their checkouts share nothing a
+test writes or holds: a database, a fixed port, a file outside the checkout.
+Whatever they must share is taken in turn behind a lock (`flock`), and the
+machine's row names the lock.

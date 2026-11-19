@@ -22,8 +22,8 @@ Task `Verify:` lines name these tiers ("fast, then full") and add only what
 is specific to the task. The commands themselves live in the repo, where they
 change (`single-source-of-truth.md`).
 
-Checks run at low priority and one at a time, cheapest first
-(`feature-loop.md` → Machine limits).
+Checks run cheapest first, at the priority and pace the machine's row
+allows (`feature-loop.md` → Machine limits).
 
 ## Known red
 A check that is red on `main` for a reason outside the task (missing local

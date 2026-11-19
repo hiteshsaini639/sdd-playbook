@@ -44,8 +44,9 @@ clone Claude Code starts in (`machine-checks.md` → The hooks).
 
 Then write `.claude/skill-additions/<skill>.md` only for what is the
 project's own (`playbook/skills/README.md` → A project's additions). For
-`sdd-feature` that is at least the machine limits: the test command at low
-priority, and the build commands with their memory caps.
+`sdd-feature` that is at least the machine limits: the table of machines
+the project is worked on (`feature-loop.md` → Machine limits), and the build
+commands with their memory caps.
 
 ## 4. What does not come along
 - **The session memory.** Claude Code keeps it per project folder, so a
