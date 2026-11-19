@@ -25,8 +25,34 @@ because the lid was closed or nobody touched the keyboard.
   `Custom` with `charge_control_end_threshold` at 80 on a Dell), otherwise in
   the BIOS. Before a day away from a socket, switch to `Standard` the night
   before, and back after.
-- Set up once per machine: `playbook/machine/install.sh`. It asks for sudo
-  once, for the lid rule, and is safe to run again.
+- Set up once per machine, with the next section's pop-ups and workspaces:
+  `playbook/machine/install.sh`, from a terminal in the desktop session. It
+  asks for sudo once, for the lid rule, and is safe to run again.
+
+## Many sessions on one laptop
+Several projects, ideas and Claude sessions run at once on one screen. Going
+round the terminals to see which one is done wastes the time they save.
+- **A session that needs you says so.** A pop-up names the project and the
+  account (`cardirehab-sdd · claude-work`) when a turn of 30 seconds or more
+  finishes, with the first line of the reply, and when a session waits for
+  an approval; that one stays on screen until clicked. Missed ones wait in
+  the list under Super+V. Short turns, headless runs (`claude -p`, a
+  feature-loop child) and SSH logins stay quiet. `machine/claude-notify`,
+  hooked into every account; a session started before it was installed
+  gets it on its next start. `CLAUDE_NOTIFY_MIN_SECONDS` changes the 30,
+  `CLAUDE_NOTIFY=0` silences one shell, `claude-notify --uninstall` all.
+- **One workspace per area, always the same number**, for example 1 the
+  main project, 2 other client work, 3 ideas and personal, 4 browser and
+  chat. Super+1…4 goes there and Super+Shift+1…4 sends the window there;
+  Super alone shows every workspace at once; a three-finger swipe moves
+  between them. Alt+Tab lists this workspace's windows, each terminal on its
+  own, and the dock shows this workspace's apps. `machine/workspaces.sh`;
+  `machine/workspaces.sh undo` puts the previous keys back.
+- **Within a workspace, tile instead of stacking.** Super+←/→ for halves, a
+  window dragged into a corner for a quarter: four sessions in view at once.
+  One terminal window per project and a tab per session: Ctrl+Shift+T opens
+  one, Alt+1…9 jumps to one.
+- `tmux` belongs on a spare machine reached over SSH (below), not here.
 
 ## A spare machine runs one-off work, started by hand
 An old laptop at home can take a heavy job off the one you carry: a long

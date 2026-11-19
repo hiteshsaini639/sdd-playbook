@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""A desktop pop-up when a Claude session needs you: it finished a turn that
+took a while, or it is waiting for an approval. The practice:
+playbook/practices/machines.md -> Many sessions on one laptop.
+
+Run by Claude Code's hooks (UserPromptSubmit, Notification, Stop), with the
+hook's JSON on stdin. It prints nothing and always exits 0, so it never gets
+in a session's way. It stays quiet when there is no desktop (an SSH login),
+when the run is headless (claude -p, a feature-loop child), when the turn was
+short, and on any error.
+
+  claude-notify --install     add its hooks to every account on this machine
+                              (~/.claude*/settings.json); safe to run again
+  claude-notify --uninstall   take them out again
+
+Per shell: CLAUDE_NOTIFY_MIN_SECONDS (default 30) is the shortest turn that
+pops up when it finishes; CLAUDE_NOTIFY=0 silences it; CLAUDE_NOTIFY_HEADLESS=1
+lets headless runs pop up too (for a test).
+"""
+import glob
+import html
+import json
+import os
+import subprocess
+import sys
+import time
+
+MIN_SECONDS = 30
+EVENTS = ("UserPromptSubmit", "Notification", "Stop")
+COMMAND = "$HOME/.local/bin/claude-notify"
+
+
+def main():
+    if len(sys.argv) > 1:
+        return manage(sys.argv[1])
+    try:
+        handle(json.load(sys.stdin))
+    except Exception:
+        pass  # a pop-up is never worth a hook error in the session
+    return 0
+
+
+def handle(data):
+    if os.environ.get("CLAUDE_NOTIFY") == "0":
+        return
+    event = data.get("hook_event_name", "")
+    session = str(data.get("session_id") or "unknown").replace("/", "_")
+    state = os.path.join(os.environ.get("XDG_RUNTIME_DIR") or "/tmp", "claude-notify")
+    started = os.path.join(state, session)
+
+    if event == "UserPromptSubmit":
+        os.makedirs(state, exist_ok=True)
+        with open(started, "w") as f:
+            f.write(str(time.time()))
+        return
+    if not (os.environ.get("WAYLAND_DISPLAY") or os.environ.get("DISPLAY")):
+        return
+    if os.environ.get("CLAUDE_NOTIFY_HEADLESS") != "1" and headless():
+        return
+
+    if event == "Notification":
+        kind = data.get("notification_type", "")
+        message = (data.get("message") or "").strip()
+        if kind in ("idle_prompt", "auth_success") or "waiting for your input" in message.lower():
+            return  # the pop-up when it finished already said so
+        send(data, message or "Needs you", "critical")
+    elif event == "Stop":
+        took = seconds_since(started)
+        if took is not None and took < min_seconds():
+            return
+        try:
+            os.remove(started)
+        except OSError:
+            pass
+        body = "Finished" + (f" after {duration(took)}" if took is not None else "")
+        reply = last_reply(data.get("transcript_path"))
+        send(data, f"{body}: {reply}" if reply else body, "normal")
+
+
+def headless():
+    """True when the claude process above this hook was started with -p."""
+    pid = os.getppid()
+    for _ in range(10):
+        try:
+            with open(f"/proc/{pid}/comm") as f:
+                comm = f.read().strip()
+            with open(f"/proc/{pid}/cmdline", "rb") as f:
+                args = f.read().split(b"\0")[1:]
+            with open(f"/proc/{pid}/stat") as f:
+                parent = int(f.read().rsplit(")", 1)[1].split()[1])
+        except (OSError, ValueError, IndexError):
+            return False
+        if comm == "claude":
+            return any(a in (b"-p", b"--print") for a in args)
+        if parent <= 1:
+            return False
+        pid = parent
+    return False
+
+
+def min_seconds():
+    try:
+        return int(os.environ.get("CLAUDE_NOTIFY_MIN_SECONDS", MIN_SECONDS))
+    except ValueError:
+        return MIN_SECONDS
+
+
+def seconds_since(path):
+    try:
+        with open(path) as f:
+            return max(0.0, time.time() - float(f.read().strip()))
+    except (OSError, ValueError):
+        return None  # no start seen (installed mid-session): say it anyway
+
+
+def duration(s):
+    s = int(s)
+    if s < 90:
+        return f"{s} s"
+    if s < 90 * 60:
+        return f"{round(s / 60)} min"
+    return f"{s // 3600} h {round(s % 3600 / 60)} min"
+
+
+def last_reply(path):
+    """The first line of the session's last reply, cut to fit a pop-up."""
+    if not path:
+        return ""
+    try:
+        with open(path, "rb") as f:
+            f.seek(0, 2)
+            f.seek(max(0, f.tell() - 256 * 1024))
+            lines = f.read().decode("utf-8", "replace").splitlines()
+    except OSError:
+        return ""
+    for line in reversed(lines):
+        try:
+            entry = json.loads(line)
+        except ValueError:
+            continue
+        if not isinstance(entry, dict) or entry.get("type") != "assistant":
+            continue
+        content = (entry.get("message") or {}).get("content")
+        if not isinstance(content, list):
+            continue
+        text = " ".join(c.get("text", "").strip() for c in content
+                        if isinstance(c, dict) and c.get("type") == "text").strip()
+        if text:
+            first = text.splitlines()[0].replace("**", "").replace("`", "").lstrip("#> -").strip()
+            return first if len(first) <= 140 else first[:139].rstrip() + "…"
+    return ""
+
+
+def project(cwd):
+    """The repository's name on its origin remote, else the folder's name."""
+    def git(*args):
+        return subprocess.run(["git", "-C", cwd, *args], capture_output=True,
+                              text=True, timeout=3).stdout.strip()
+    try:
+        url = git("remote", "get-url", "origin")
+        if url:
+            return url.rstrip("/").rsplit("/", 1)[-1].rsplit(":", 1)[-1].removesuffix(".git")
+        top = git("rev-parse", "--show-toplevel")
+        if top:
+            return os.path.basename(top)
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return os.path.basename(cwd.rstrip("/")) or cwd
+
+
+def account():
+    """The config folder's name without the dot: ~/.claude-work reads claude-work."""
+    folder = os.environ.get("CLAUDE_CONFIG_DIR") or os.path.expanduser("~/.claude")
+    return os.path.basename(folder.rstrip("/")).lstrip(".")
+
+
+def send(data, body, urgency):
+    title = f"{project(data.get('cwd') or os.getcwd())} · {account()}"
+    subprocess.run(["notify-send", "--app-name=Claude", "--icon=utilities-terminal",
+                    f"--urgency={urgency}", title, html.escape(body, quote=False)],
+                   capture_output=True, timeout=5)
+
+
+def manage(action):
+    if action not in ("--install", "--uninstall"):
+        print(__doc__)
+        return 2
+    ours = {"type": "command", "command": COMMAND, "timeout": 10}
+    for folder in sorted(glob.glob(os.path.expanduser("~/.claude")) +
+                         glob.glob(os.path.expanduser("~/.claude-*"))):
+        path = os.path.join(folder, "settings.json")
+        if not os.path.isdir(folder) or not (os.path.exists(path) or
+                                              os.path.exists(os.path.join(folder, ".credentials.json"))):
+            continue
+        settings = {}
+        if os.path.exists(path):
+            with open(path) as f:
+                settings = json.load(f)
+        hooks = settings.setdefault("hooks", {})
+        changed = False
+        for event in EVENTS:
+            groups = hooks.get(event, [])
+            mine = [g for g in groups if any(h.get("command") == COMMAND for h in g.get("hooks", []))]
+            if action == "--install" and not mine:
+                hooks[event] = groups + [{"hooks": [dict(ours)]}]
+                changed = True
+            elif action == "--uninstall" and mine:
+                rest = [g for g in groups if g not in mine]
+                if rest:
+                    hooks[event] = rest
+                else:
+                    hooks.pop(event, None)
+                changed = True
+        if not hooks:
+            settings.pop("hooks", None)
+        if changed:
+            tmp = path + ".claude-notify.tmp"
+            with open(tmp, "w") as f:
+                json.dump(settings, f, indent=2)
+                f.write("\n")
+            os.replace(tmp, path)
+        state = "added" if action == "--install" else "removed"
+        print(f"claude-notify: hooks {state if changed else 'already ' + state} in {path}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

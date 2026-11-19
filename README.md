@@ -40,13 +40,13 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/glossary.md` — `CONTEXT.md`: what a word means here, and nothing else
 - `practices/parked-work.md` — anything parked mid-task becomes a W file before work continues
 - `practices/account-label.md` — every session names the account it runs on, above the prompt
-- `practices/machines.md` — the laptop keeps working shut on charger; a spare machine only for one-off work started by hand
+- `practices/machines.md` — the laptop keeps working shut on charger; pop-ups and fixed workspaces for many sessions; a spare machine only for one-off work started by hand
 - `practices/ai-features.md` — answer only or agent; one seam; the Claude CLI as a child that can only answer; the token
 - `practices/production-only-testing.md` — no staging: ship dark behind permissions, roll out by granting, migrations only add, a test business that can be emptied
 - `skills/` — the Claude Code skills that run these practices; linked into a project (`skills/README.md`)
 - `hooks/` — the git and Claude Code hooks that refuse a broken rule; installed by `hooks/link.sh`
 - `mods/` — Claude Code mods every project shares; installed per account by `mods/install.sh`
-- `machine/` — per-machine setup: the lid rule and `claude-keep-awake`, installed by `machine/install.sh` (`practices/machines.md`)
+- `machine/` — per-machine setup: the lid rule, `claude-keep-awake`, `claude-notify` and `workspaces.sh`, installed by `machine/install.sh` (`practices/machines.md`)
 - `templates/` — generic spec/plan/tasks/issue, the constitution, and the issues and prompts READMEs, before project adaptation
 - `work/` — the playbook's own parked work, mostly practices still being learned (`W<n>` files, `practices/parked-work.md`)
 - `decisions/` — ADRs that apply to any project
