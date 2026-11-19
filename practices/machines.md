@@ -17,8 +17,14 @@ because the lid was closed or nobody touched the keyboard.
   running hot, so unplugging a shut laptop ends the run.
 - A screen that turns off or locks stops nothing; only a suspend does.
 - Working shut: on a hard surface, never a bed or a sofa, which block the
-  vents. A laptop that sits on charger for days has its battery capped at
-  about 80% in the BIOS, where the BIOS offers it.
+  vents.
+- **A laptop that mostly stays on charger has its battery capped.** Kept
+  full and warm all day, a battery loses its capacity much faster. Set it
+  from Linux where the laptop offers it
+  (`/sys/class/power_supply/BAT0/charge_types`: `Long_Life` on a Lenovo,
+  `Custom` with `charge_control_end_threshold` at 80 on a Dell), otherwise in
+  the BIOS. Before a day away from a socket, switch to `Standard` the night
+  before, and back after.
 - Set up once per machine: `playbook/machine/install.sh`. It asks for sudo
   once, for the lid rule, and is safe to run again.
 
