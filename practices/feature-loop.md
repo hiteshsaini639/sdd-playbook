@@ -244,7 +244,8 @@ the human.
 
 **The limits are per machine.** A project is often worked on from more than
 one machine (`machines.md`), and what a small one must ration a large one
-need not. The project keeps one table of its machines, a row each:
+need not. One table holds the machines, a row each
+(`machines.md` → Each machine's limits):
 - **how to tell it**: its `hostname`, or its core count (`nproc`) where the
   name is not known;
 - **checks**: low priority (`nice -n 19`) and one at a time, or full

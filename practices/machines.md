@@ -2,8 +2,18 @@
 
 One laptop does the work and goes everywhere. A spare machine, if there is
 one, helps only when someone has just made sure it is ready. What each
-machine may run for a project's checks and feature loops:
+machine may run for a project's checks and feature loops: → Each
+machine's limits, below; what a row holds and how a loop uses it:
 `feature-loop.md` → Machine limits.
+
+## Each machine's limits
+One row a machine. A machine not listed takes the last row until its owner
+gives it one.
+
+| Machine | How to tell it | Checks | Loops at once |
+|---|---|---|---|
+| The laptop you carry | `hostname` is `lenovo` (22 cores, 30 GB) | No load limit (the owner, 2026-11-20): full priority, no `nice`; a test runner with its own worker count; the slow checks side by side once the cheap ones pass; a build with no memory check and no heap cap | No limit for load; only what their checkouts would share (`feature-loop.md` → Machine limits) |
+| Any other | not listed | The strictest: `nice -n 19`, one heavy command at a time, `free -m` before a full check or a build, a build's heap capped | One |
 
 ## The laptop keeps working shut, on charger
 A long run (a feature loop, a full test suite, a big copy) must not stop

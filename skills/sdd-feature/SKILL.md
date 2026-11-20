@@ -25,7 +25,7 @@ owner's machine, and any rule the owner added to the loop.
    the owner did not switch on runs no child, not even as a fallback when
    another's limit ends.
 3. **Check which machine this is:** `hostname; nproc`, against the machine
-   table the additions point to (`feature-loop.md` → Machine limits). Its
+   table (`playbook/practices/machines.md` → Each machine's limits). Its
    row goes into every child prompt. A machine the table does not list: ask
    the owner for its row, and until then use the strictest.
 4. Do not read product-repo files yourself. That is the children's budget.
