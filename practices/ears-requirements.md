@@ -41,3 +41,20 @@ logged.`
 The AC names the precondition, the action, and the observable result. If
 writing it is hard, the requirement is vague — fix the requirement, not the
 AC.
+
+## On a screen, "shown" is not enough
+An AC that a control is shown still passes when the control is half off
+the screen or shrunk. When a change removes, adds or moves something in a
+bar, a row or a list, the AC for what stays names its size and its place
+against something the owner already likes on screen: the element that
+was there before, or its twin on another screen. "Its size and its
+distance from the right edge are those of the profile avatar on the
+Messages tab, and it lies wholly inside the screen", not "the bar holds
+the help button".
+- The neighbour that goes often gave the one that stays its margin, so
+  check the margin first.
+- The test reads the rects at a phone's width, the narrowest one the app
+  supports. The owner's look on a real phone is the last check, not the
+  first place this is found.
+- When the change is asked for "as on the other screen", the AC names
+  which element on which screen, so the size and place can be measured.
