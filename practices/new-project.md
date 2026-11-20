@@ -25,6 +25,7 @@ git submodule add <playbook remote> playbook
 | `map/<surface>.md` | new, one per product repo: where things live, pointing in (`token-budgets.md`) |
 | `prompts/README.md` | `playbook/templates/prompts-README.md` |
 | `runbooks/local-run.md` | new when the first by-hand check is needed (`local-run-check.md`) |
+| `runbooks/production-release.md` | new before the first production release: its first step the open findings, its last the record (`release-learning.md`) |
 | `CONTEXT.md` | new: the glossary, seeded with the terms the first decisions fix (`glossary.md`) |
 | `work/README.md` | new: parked work, `W<n>` files (`parked-work.md`) |
 | `docs/legacy/` | only when replacing a system: the tag, the feature inventory, the data traps (`rebuild-from-legacy.md`) |
