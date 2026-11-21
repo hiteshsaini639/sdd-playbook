@@ -29,7 +29,9 @@ Ask: *would this be true for any project of this kind?*
 |---|---|
 | any project: a UI, UX, web, app, roles-and-permissions, data, release or process lesson | the playbook: the practice a person would open at that moment, or a new one. A lesson still being proven is a `work/` item until a project has seen it work (`parked-work.md`) |
 | this project alone | the project's own home for that kind of fact: its constitution, an ADR, a spec, the map, an issue |
-| this machine or this account | the session memory, or `machines.md` |
+| every account and project of this person | the user-level `CLAUDE.md` all accounts share (`account-label.md` → One file for every account) |
+| this machine | `machines.md` |
+| one account in one project | the session memory |
 | nothing beyond the case | nothing: fixing it was enough |
 
 When unsure between the playbook and the project, write it in the

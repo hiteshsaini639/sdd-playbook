@@ -29,6 +29,25 @@ terminal, in the account's own colour.
 - **It is one mod, in the playbook:** `mods/account-band/`. A project
   does not copy it or keep a version of its own.
 
+## One file for every account
+Memory is kept per account and per project folder. A preference told to
+one session reaches one account in one project, and the owner has to say
+it again on each account. What must hold everywhere goes in one
+user-level file instead: `~/.claude/CLAUDE.md`, with every other
+account's `CLAUDE.md` a link to it.
+- **`mods/install.sh <account>` makes the link.** It never replaces a file
+  the account already has: it says so, and the file is merged by hand
+  first. A new account is linked when it is set up.
+- **One file, whichever account edits it.** A session on any account that
+  edits its `CLAUDE.md` edits the one file.
+- **A general memory note moves in.** When a note in memory turns out to
+  hold on every account, it moves into the file and leaves memory in the
+  same change (`learning-loop.md`).
+
+Learned when a request never to credit Claude in commits was kept on one
+account alone. Sessions on the other two went on adding the credit for
+months.
+
 ## Which account to use
 Each account has its own usage limits: a five-hour window and a weekly
 one. The bar's right end shows how full every account on the machine is,
