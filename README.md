@@ -29,7 +29,7 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/session-handoff.md` — a prompt file for the next session, taken once and deleted
 - `practices/side-sessions.md` — a second session on the same machine, without breaking the first
 - `practices/unattended-job-alerts.md` — a scheduled job proves its output; alerts for failed, never ran, machine down
-- `practices/release-learning.md` — each release's findings become runbook edits or issues the same day; a check names its origin
+- `practices/learning-loop.md` — the same mistake never twice: each lesson written at once where it is read when it matters, a repeat made a check; at a release, the findings
 - `practices/new-project.md` — the checklist that sets a new project up for all of this
 - `practices/rebuild-from-legacy.md` — the old system as evidence: tag, inventory, count, cite
 - `practices/api-surfaces.md` — one database client, public vs admin surfaces, errors, limits, resends, health
@@ -61,5 +61,5 @@ Separate repos, general to any project, installed once per machine rather than p
 ## How this grows
 A practice earns its place here by being learned the hard way on a real
 project, not by sounding correct. When something in a project repo turns out
-to generalise, it moves up. Keep each file short enough to read in full, and
+to generalise, it moves up (`practices/learning-loop.md`). Keep each file short enough to read in full, and
 prefer deleting a rule that stopped paying over keeping it out of politeness.

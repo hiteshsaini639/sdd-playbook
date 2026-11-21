@@ -99,12 +99,14 @@ goes in the report with the reason, never silently dropped.
 **What to understand.** The owner approves every spec and plan and answers
 every stop, and each answer is only as good as the owner's grasp of the
 code underneath. Children write the code and the parent reads reports, so
-nothing else in the loop builds that grasp. The report ends with four
+nothing else in the loop builds that grasp. The report ends with five
 lines:
 - the one idea the feature rests on;
 - the riskiest change, with repo, file and line;
 - how it could fail in use;
-- where to look first if it does.
+- where to look first if it does;
+- the lesson that would hold for any project and where it was written, or
+  "none" (`learning-loop.md`).
 
 Plain words, every id with its meaning. Not a summary of the tasks: what a
 reviewer would want explained before approving the next feature.
