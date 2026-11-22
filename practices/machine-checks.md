@@ -57,3 +57,10 @@ playbook/hooks/link.sh spec <product folder>...    # or: single <code folder>...
   is wrong, not strict.
 - **Branch protection is the owner's**, set on the host. An agent files a
   missing one as an issue and never changes it.
+  Before a plan relies on a required check, confirm the host offers one
+  for that repository: GitHub gives a private repository of a free personal
+  account neither rulesets nor branch protection (`gh api
+  repos/<owner>/<repo>/rules/branches/<branch>` answers 403). Then the gate
+  is the step that deploys, with a runbook step before the merge. Learned
+  when CardiRehab's 062 planned a ruleset its account could not have
+  (2026-11-22).
