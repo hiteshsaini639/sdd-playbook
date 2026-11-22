@@ -10,6 +10,15 @@ it first; where it and this file differ, it wins.
 1. Read `spec.md` and `plan.md` for $ARGUMENTS.
 2. Create `tasks.md` from `specs/_templates/tasks.md`. Rules:
    - T1 is the enum/schema change if there is one. T2 is the failing AC tests.
+     **Its text asks that each test be red for the missing feature alone:**
+     the agent passes a hand-written sample of the markup or answer the plan
+     names through the test's own helpers once, and sees it pass; a test of
+     where something sits bounds it on both sides (after this heading and
+     before the next one), not on one. (Life-app 008, 22 Nov 2026: a text
+     helper read every tag as a space, so no correct markup could meet the
+     test, and T2 had to rewrite it; a placement test checked only "after
+     the heading", so a box under the wrong heading passed until the drift
+     audit.)
    - **Slice vertically** (`playbook/practices/vertical-slices.md`). A task
      that changes a contract either carries its clients or is immediately
      followed by the task that does. Never schedule all of one client and
