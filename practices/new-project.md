@@ -30,6 +30,10 @@ git submodule add <playbook remote> playbook
 | `work/README.md` | new: parked work, `W<n>` files (`parked-work.md`) |
 | `docs/legacy/` | only when replacing a system: the tag, the feature inventory, the data traps (`rebuild-from-legacy.md`) |
 
+Among the first decisions in `specs/roadmap.md`: where AI helps the
+product's users (`ai-features.md` → Look for it in every feature), so the
+first features plan the seam instead of adding it later.
+
 Each product repo gets a **Checks** section in its own `CLAUDE.md`
 (`verification-harness.md`), committed there, and a port table and one-command
 start (`local-dev.md`).

@@ -20,6 +20,12 @@ Unhappy paths in scope: <list them explicitly>.
 not the internals. For a vocabulary: the full code list and what each code
 means.>
 
+## AI
+<Each step a model takes off the user's hands: what it reads, what it
+returns, who accepts it, and which model (`playbook/practices/local-models.md`
+for a narrow job; Claude through the seam, `ai-features.md`, for judgement).
+"None", with the reason, when the feature has no such step.>
+
 ## Migration
 <What existing rows hold today and what each maps to. "None" if greenfield.
 Every legacy value must map somewhere, including misspellings and orphans.>

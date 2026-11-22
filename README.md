@@ -42,7 +42,8 @@ Consumed as a git submodule at `playbook/` in a project's spec repo.
 - `practices/parked-work.md` — anything parked mid-task becomes a W file before work continues
 - `practices/account-label.md` — every session names the account it runs on, above the prompt
 - `practices/machines.md` — the laptop keeps working shut on charger; pop-ups and fixed workspaces for many sessions; a spare machine only for one-off work started by hand
-- `practices/ai-features.md` — answer only or agent; one seam; the Claude CLI as a child that can only answer; the token
+- `practices/ai-features.md` — look for it in every feature; a free local model for a narrow job, Claude for judgement; answer only or agent; one seam; the Claude CLI as a child that can only answer; the token
+- `practices/local-models.md` — free models on our own machine, by job: cut-outs, tagging, OCR, speech, translation, small text models; when they save tokens; the licences a business can't use
 - `practices/production-only-testing.md` — no staging: ship dark behind permissions, roll out by granting, migrations only add, a test business that can be emptied
 - `skills/` — the Claude Code skills that run these practices; linked into a project (`skills/README.md`)
 - `hooks/` — the git and Claude Code hooks that refuse a broken rule; installed by `hooks/link.sh`

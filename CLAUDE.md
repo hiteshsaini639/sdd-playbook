@@ -39,7 +39,8 @@ Read the one practice you need. Do not read all of them.
 | Parking work for later | `practices/parked-work.md` |
 | Using more than one Claude account on a machine | `practices/account-label.md` |
 | Setting up a laptop: the lid shut, pop-ups, workspaces; or a spare machine; how hard a machine's checks may load it | `practices/machines.md` |
-| Adding anything that calls an AI model | `practices/ai-features.md` |
+| Adding anything that calls an AI model; specifying any feature (look for a step AI can take) | `practices/ai-features.md` |
+| A narrow job a free model could do: photos, a recording, a bill, a PDF, a translation; or about to read many photos or pages | `practices/local-models.md` |
 | Changing or installing a skill | `skills/README.md` |
 | A rule keeps being broken, or installing the hooks | `practices/machine-checks.md` |
 

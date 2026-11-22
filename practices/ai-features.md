@@ -7,6 +7,28 @@ a small trip app whose worker runs a skill headless over an inbox. Both
 reach Claude through the Claude CLI on the owner's own subscription: no
 billing to set up, quick to start, right for an owner-only first phase.
 
+## Look for it in every feature
+Almost every app has a step a model can take off someone's hands: a photo
+to read, a voice note to write down, a bill or a PDF to turn into fields,
+a list to sort, a reply or a summary to draft, a language to translate, a
+search that should find what was meant. So each spec looks for one
+(`sdd-spec`, the spec's AI section) and names it, or says None and why.
+The owner's call (22 Nov 2026): AI belongs in almost every app.
+
+**Which model**, in this order:
+1. **A free model on our own machine** when the job is one narrow thing:
+   read, cut out, transcribe, translate, tag, find (`local-models.md`). No
+   cost per call, and the files stay on the server.
+2. **Claude, through the seam below**, when the job needs judgement or
+   writing: a plan, a reply, what a person meant.
+3. **Both**, when a job has both halves: the local model turns the photo
+   or the recording into text, and Claude judges the text, for a fraction
+   of what the media would cost.
+
+A local model in the app keeps the rules below: its own seam, what is
+sent listed, the answer as data, a person accepts, its failure kinds, a
+stand-in in the tests. It records the time a call took in place of tokens.
+
 ## Pick the shape first
 Two shapes for two kinds of job. Decide before anything else; the rest of
 this file differs by it.
