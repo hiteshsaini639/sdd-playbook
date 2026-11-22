@@ -16,5 +16,15 @@ own repos, run at their step without anyone remembering them.
 - The release's own learning, its findings and its record, is already a
   practice: `practices/learning-loop.md` → Where the loop runs.
 
+- Proved on CardiRehab's 062 release (2026-11-22), the first run this
+  way: every check of the backend and web ran from scripts at its step,
+  and the record was written from their lines. Caught: the key check, on
+  preprod, a missing key that would have stopped the deploy (062/T11);
+  the smoke after web's production deploy, a 60 s freeze of the server
+  itself, not the release (I562). The rehearsal had no migration to run,
+  and no app build rode.
+
 Earns its place when: a production release has run its checks from the
-scripts, from end to end, and the scripts caught something.
+scripts, from end to end, and the scripts caught something. Met for the
+backend and web (above). Still to see: an app build's release, its store
+build checked by its script, and a migration rehearsed at the deploy.

@@ -37,6 +37,13 @@ repeated only when an acceptance criterion names repeated runs, or the
 owner agrees: each one is minutes of someone waiting. A test that passes
 only sometimes is an issue to file, not a reason to rerun until green.
 
+A branch cut from an older point, such as a release branch cut from
+`production`, lacks the test fixes `main` gained since. When its run is
+red on such a test alone, one whose issue is fixed on `main`, the red is
+that old flake, not the change's: one rerun at the owner's word, and no
+new issue. The release's record names it. Learned at CardiRehab's 062
+release (web #72, I491).
+
 ## A test waits on the event, not the clock
 When writing a test that waits for something (a page loaded, a dialog
 closed, a request answered), wait on that thing itself, with the runner's
@@ -46,6 +53,16 @@ loaded machine or a CI runner misses it, and the next test fails on what
 the first left behind. Learned when three of one project's tests failed
 this way in one month, each fixed alone (CardiRehab I378, I510, I560). A
 fourth would make it a check (`machine-checks.md`).
+
+## A check on a deployed environment gets no answer
+When a smoke or a check after a deploy times out with no answer at all,
+not an error status, read the host's kernel log for that minute before
+blaming the check or the release. A virtual machine its host stops
+running freezes everything on it, and its kernel says so afterwards (an
+RCU stall, "rcu_sched kthread starved"). Then the check was right, the
+release is not at fault, and the host is the issue. Learned when a 60 s
+freeze right after a web deploy looked like the nginx reload's fault
+(CardiRehab I562).
 
 ## Identities for tests
 Tests never create users by hand and never go looking for a token. The test
