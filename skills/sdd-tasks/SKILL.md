@@ -24,6 +24,12 @@ it first; where it and this file differ, it wins.
      "AC1, AC3 pass; AC2 still red". It names the repo's check tiers
      (`playbook/practices/verification-harness.md`) instead of restating
      their commands.
+   - **A verify names only tests the task can turn green.** A test whose
+     set-up needs what a later task builds (a row only a later write makes,
+     a route a later task adds) goes green with that later task, and is
+     named in that task's verify. (FruitFitz 029/T3: four sender tests made
+     their message by giving a task, which only T5 made ask; T3 could not
+     pass its verify and stopped for a decision.)
    - Each task leaves every touched repo's test command runnable.
    - **A name a task gives must be writable where it goes.** A class, a
      file, a key or a test group a task text names is legal in that

@@ -43,6 +43,16 @@ with a generous timeout and its output to a file, never behind a loop over
 never ends. Before reporting, the child stops every background shell it
 started and says so.
 
+The prompt names every check tier the project asks for before a tick
+(fast, test, full), even when the task's own verify line names fewer: a
+child runs what its prompt names and no more (FruitFitz 029/T1 ticked
+without the full tier; the parent ran it after). A test run longer than
+the tool's foreground limit runs in the background with its output to a
+file, and the child waits on its process id (`kill -0 <pid>`) in short
+foreground checks; it never hands back while a run of its own is still
+going (029: the full test took about ten minutes, past a 600 s limit, and
+two children handed back mid-run, one with its work uncommitted).
+
 ## When the parent stops
 Only for a decision, never for routine progress:
 - a child reports a question the spec does not answer
@@ -91,7 +101,11 @@ what the feature changed, in each product repo, on its feature branch:
 - `/security-review` as well, when the plan's **Security review** says yes.
 
 These are skills, which a headless child cannot run, so the parent runs
-them. A finding is sorted like anything a child left: made by this
+them. A review skill reads the diff of the folder its session started
+in. When the feature lives in its own worktree, run the skill from a
+session started there, or review `git diff origin/main...HEAD` in that
+worktree by the skill's method (FruitFitz 029/T13: `/security-review`
+read the main folder's empty diff, and the review was done by hand). A finding is sorted like anything a child left: made by this
 feature, it is fixed in the feature, by a fix task the parent adds; there
 before, it is an issue (`issue-log.md`). A finding the parent judges wrong
 goes in the report with the reason, never silently dropped.
