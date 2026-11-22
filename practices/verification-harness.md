@@ -37,6 +37,16 @@ repeated only when an acceptance criterion names repeated runs, or the
 owner agrees: each one is minutes of someone waiting. A test that passes
 only sometimes is an issue to file, not a reason to rerun until green.
 
+## A test waits on the event, not the clock
+When writing a test that waits for something (a page loaded, a dialog
+closed, a request answered), wait on that thing itself, with the runner's
+own limit as the only clock. Never a short fixed wait, and never the test
+library's default wait, chosen because it passed on an idle machine: a
+loaded machine or a CI runner misses it, and the next test fails on what
+the first left behind. Learned when three of one project's tests failed
+this way in one month, each fixed alone (CardiRehab I378, I510, I560). A
+fourth would make it a check (`machine-checks.md`).
+
 ## Identities for tests
 Tests never create users by hand and never go looking for a token. The test
 sources provide one fixture that:
