@@ -46,7 +46,12 @@ started and says so.
 The prompt names every check tier the project asks for before a tick
 (fast, test, full), even when the task's own verify line names fewer: a
 child runs what its prompt names and no more (FruitFitz 029/T1 ticked
-without the full tier; the parent ran it after). A test run longer than
+without the full tier; the parent ran it after). The full run that
+counts is one on the tree committed: a fix after it, even one line of a
+test, means another full run (CardiRehab 064/T2 and T6a each fixed a
+test after their full run and ticked on the earlier run; the parent ran
+it after both times; the line is in the skill's child template since
+064). A test run longer than
 the tool's foreground limit runs in the background with its output to a
 file, and the child waits on its process id (`kill -0 <pid>`) in short
 foreground checks; it never hands back while a run of its own is still

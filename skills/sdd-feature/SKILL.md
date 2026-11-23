@@ -117,6 +117,10 @@ Machine limits: this is the user's workstation, <hostname>. Its row:
 Run verify steps cheapest first. Never run a production build, a dev server
 or a watch mode unless the task's Verify line names it.
 <the project's commands and caps, from the additions>
+Every check tier the project asks before a tick, in each repo you touch,
+even where the task's Verify names fewer. The tick needs one whole full
+run green on the tree you commit: if you change anything after a full
+run, even one line of a test, run the full again.
 Leave "manual:" verify steps to the user and say so in your report.
 
 Before you report, clean what your own change leaves behind: a reference
