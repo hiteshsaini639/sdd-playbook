@@ -90,6 +90,18 @@ both in the run report. Looking only for the task's own commands (`pnpm`,
 `flock`) misses a `bash` loop running `sleep`. That is how one child's
 three wait loops ran for 85 minutes unnoticed.
 
+**A child that is waiting is not stuck.** When a subagent's notice says
+it waits on its own background work, it is still alive: wait for its
+next notice, and do not message it to "carry on". A message moves the
+call it is waiting in to the background, and the child may take that as
+the end and hand back with its run unfinished. Message it only when the
+`ps` above shows none of its runs or loops left and it has stayed silent.
+Learned at CardiRehab 064/T5: the parent saw no Maven process at one
+instant, between two of the child's runs, and messaged it; the child
+stopped its second full run, handed back uncommitted, and left an
+`until [ -f …exit ]; do sleep 10; done` loop waiting on a file nothing
+would write. The parent ran the full check and committed for it.
+
 ## After the last task
 **One review.** The drift audit holds the code to the spec, so a defect
 the spec never imagined passes it: an endpoint that answers anyone, a
