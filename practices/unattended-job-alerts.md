@@ -57,6 +57,39 @@ in the server's environment file (owner-readable only), never in a repo, a
 ticket, a log line or an alert message. The repo holds the scripts and unit
 files; the server holds the address.
 
+## A log a job reads is one record per event
+When a job reads an application's log and mails what it finds (a daily
+error digest, an alert for a new kind of error), the log is the job's
+input, and anyone who can get a value logged can write to it. Before
+building such a job:
+- **One record per event.** Write the log as one JSON object a line, with
+  the framework's structured logging, so a value's line break is escaped
+  and cannot start a line that reads as a record of its own, with any
+  level, logger and text the sender chose. Escaping the message alone is
+  not enough: an exception's message is printed after the line and can
+  carry a break too. Keep the fields the old line had, so the job's kinds
+  of error do not change at the switch.
+- **One reader.** The job, the deploy's checks and a person reading the log
+  by hand all go through one script that renders records as lines. Every
+  line after a record's first is indented, so none can pass for a new
+  record, and control characters are shown, never sent to a terminal.
+- **What is not a record is named as such**, never read as one. Output
+  that does not come from the logger, such as the runtime's own lines, is
+  listed apart, and its alert's subject holds none of its text.
+- **A caller who left is no error.** A viewer who closes a video mid-stream,
+  or a browser that drops a request when the user skips ahead, makes the
+  server's write fail. Logged as an unhandled 500, it fills the mails with
+  noise. Catch the answer stream's own types (Tomcat's
+  `ClientAbortException`, Spring's `AsyncRequestNotUsableException`) and log
+  them below WARN. Don't match on "connection reset" in a message: from a
+  database or a mail server, that is a real error.
+
+Learned when CardiRehab's error mails (its 061) shipped reading a text log.
+A security review found that a request's value could forge an ERROR line,
+and so mail the owner anything (I556). The first digests also carried a
+closed video as an unhandled 500 (I419). Both are fixed in its 067, which
+is still being proven (2026-11-24).
+
 ## Test it before trusting it
 - Fire the whole chain once with a dummy job made to fail, whose output
   says it is a test.

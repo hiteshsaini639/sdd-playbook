@@ -25,7 +25,7 @@ Read the one practice you need. Do not read all of them.
 | Checking a change by hand on a local run | `practices/local-run-check.md` |
 | Handing work to the next session | `practices/session-handoff.md` |
 | Working beside another session | `practices/side-sessions.md` |
-| Scheduling a job nobody watches | `practices/unattended-job-alerts.md` |
+| Scheduling a job nobody watches; mailing errors read from a log | `practices/unattended-job-alerts.md` |
 | Learned something, or a mistake came back; releasing to production | `practices/learning-loop.md` |
 | Starting a new project | `practices/new-project.md` |
 | Replacing an old system | `practices/rebuild-from-legacy.md` |
