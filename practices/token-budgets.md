@@ -26,6 +26,13 @@ file to learn:
 That line replaces opening the file. Twenty of them replace exploring a
 module.
 
+When a row lists a kind of file each feature adds (a test file, a
+migration, a route), name the pattern (`<NNN>-<area>.test.ts`), never the
+files one by one: a list goes stale with the next feature, and nobody
+reads that row while adding a file. Learned in life-app 010 (25 Nov
+2026): the worker map's tests row named four files; three features had
+each added a test it never named.
+
 ## Keep the map honest
 A stale map is worse than none, because it is trusted. So: whoever finds the
 map wrong fixes it as part of their task, not as a follow-up. The correction
