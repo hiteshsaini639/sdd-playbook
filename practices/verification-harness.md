@@ -54,6 +54,16 @@ the first left behind. Learned when three of one project's tests failed
 this way in one month, each fixed alone (CardiRehab I378, I510, I560). A
 fourth would make it a check (`machine-checks.md`).
 
+## A form test saves the way a person does
+When testing a form whose boxes check what was typed only once they are left
+(on blur), also save without leaving the box: type, then press Enter in it, or
+press Save straight away. Enter, and a phone keyboard's Go, send the form with
+the focus still in the box, and a test helper's click on Save does not take it
+off either, so a test that leaves every box before saving never sees what a
+person sees. Learned when FruitFitz 034's change-the-shift dialog said nothing
+at all when `abc` was typed and Enter pressed, while its test, which left each
+box first, passed (034/T11's review, 26 Nov).
+
 ## A check on a deployed environment gets no answer
 When a smoke or a check after a deploy times out with no answer at all,
 not an error status, read the host's kernel log for that minute before
