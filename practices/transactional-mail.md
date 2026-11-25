@@ -24,7 +24,15 @@ because the link only ever went to a mailbox.
   row id, and the server's reply code. It never writes the address, the
   link or the password.
 - The domain publishes SPF, DKIM and DMARC before the first real send, or
-  the mail lands in spam. DMARC's reports go to the support address.
+  the mail lands in spam.
+- When choosing where DMARC's aggregate reports go (`rua`): never to a
+  mailbox people work from. The big receivers send one every day, and
+  sometimes send the same report several times. Point `rua` at a DMARC
+  report service that mails a short digest. Until there is one, use the
+  support address, with a filter that moves them to their own folder,
+  read, set up the same day as the record. Learned when CardiRehab's
+  support inbox got 37 reports in 15 days, one of them nine times (051,
+  2026-11).
 
 ## The mail itself
 - One design for every mail, chosen from a prototype before it is built.
