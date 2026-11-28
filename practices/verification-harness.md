@@ -54,6 +54,15 @@ the first left behind. Learned when three of one project's tests failed
 this way in one month, each fixed alone (CardiRehab I378, I510, I560). A
 fourth would make it a check (`machine-checks.md`).
 
+## Tests run in one time zone everywhere
+When setting up a repo's test scripts, pin the time zone they run in (`TZ`),
+the same on every workstation and in CI. A page that shows a time in the
+viewer's zone gives a different date at 04:00 in Kolkata than at 22:30 UTC, so
+a test that reads it passes where it was written and fails only in CI, after
+the whole feature has been built against it. Learned when FruitFitz 034's
+feature loop ran green in Asia/Kolkata and its pull request failed in UTC on a
+sign-off date (#50, I87, 27 Nov).
+
 ## A form test saves the way a person does
 When testing a form whose boxes check what was typed only once they are left
 (on blur), also save without leaving the box: type, then press Enter in it, or
