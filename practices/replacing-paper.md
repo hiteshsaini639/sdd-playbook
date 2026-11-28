@@ -25,5 +25,18 @@ shop's back office that moved its monthly paper sheets onto tablets.
   before it existed.
 - Keep scans of the originals in the repo's ignored private folder, and
   build the first lists from them.
+- **When a sheet or message has sums, take each figure's meaning from what
+  people already write, not only from how the owner describes it.** Before
+  the spec is approved, work the formula on two or three real past reports
+  from each place that writes one, and pick reports that use every kind of
+  line (a cash out, a refund, a carry-over), not only the tidy one. If the
+  software's sum and theirs disagree, ask which is meant before building.
+  Learned when a shop's nightly cash report went into the back office: the
+  spec took the owner's word that closing cash was counted before the cash
+  out, and its worked example had no cash out. Both counters typed it after
+  the cash out, so every day with one showed a false shortfall of its size.
+  Their own WhatsApp reports added the cash out back. Found from the first
+  week's production days and fixed by changing the sum to match them
+  (FruitFitz 018/A2, I88, 28 Nov 2026).
 - Let the first sheet set the pattern the others reuse: a list someone
   edits, a day to fill in, and a month to sign and print.
